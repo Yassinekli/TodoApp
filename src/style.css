@@ -6,6 +6,30 @@
     margin-top: 50px;
 }
 
+.custom-control-label::before{
+    border: #007bff solid 1px;
+}
+
+.custom-control-label::before ,.custom-control-label::after{
+    left: -15px;
+}
+
+.far{
+    cursor: pointer;
+}
+
+.fa-trash-alt{
+    color: rgb(245, 27, 27);
+}
+
+.fa-edit{
+    color: #0062cc;
+}
+
+.fa-star{
+    color: #0062cc;
+}
+
 .todo-container{
     margin-top: 10px;
 }
