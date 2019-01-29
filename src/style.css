@@ -1,0 +1,11 @@
+
+.container:last-child{
+    border-bottom: 1px solid #0062cc;
+    border-bottom-left-radius: 0.25em;
+    border-bottom-right-radius: 0.25em;
+    margin-top: 50px;
+}
+
+.todo-container{
+    margin-top: 10px;
+}
