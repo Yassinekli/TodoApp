@@ -6,15 +6,19 @@ import '../style.css';
 
 class App extends Component {
 	componentDidMount()
-	{ $('[data-toggle="tooltip"]').tooltip({placement:"top", title:"Add TODO", trigger:"hover", delay: { 'show': 600}}); }
+	{ 
+		$('[data-toggle="tooltip"]')
+			.tooltip({placement:"top", title:"Add TODO", trigger:"hover", delay: { 'show': 600 }})
+			.on('shown.bs.tooltip', ()=>{setTimeout(()=>{
+				$('[data-toggle="tooltip"]').tooltip('hide');
+			}, 3000)});
+	}
 
 	render() {
 			return (
 				<div className="container">
 					<div className="clearfix">
-						<button className="btn btn-primary float-right rounded-circle" 
-									data-toggle="tooltip"
-									>+</button>
+						<button className="btn btn-primary float-right rounded-circle" data-toggle="tooltip">+</button>
 					</div>
 					<div className="todo-container">
 						<div className="row border border-bottom-0 border-primary rounded">
