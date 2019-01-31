@@ -1,11 +1,7 @@
+/* Imports */
+@import url('https://fonts.googleapis.com/css?family=Roboto:500');
 
-.container:last-child{
-    border-bottom: 1px solid #0062cc;
-    border-bottom-left-radius: 0.25em;
-    border-bottom-right-radius: 0.25em;
-    margin-top: 50px;
-}
-
+/* Modifie some properties of third-party's classes */
 .custom-control-label::before{
     border: #007bff solid 1px;
 }
@@ -23,13 +19,39 @@
 }
 
 .fa-edit{
-    color: #0062cc;
+    color: #62a0df;
 }
 
 .fa-star{
-    color: #0062cc;
+    color: #62a0df;
+}
+
+/* Some Classes */
+.container:last-child{
+    border-bottom: 1px solid #0062cc;
+    border-bottom-left-radius: 0.25em;
+    border-bottom-right-radius: 0.25em;
+    margin-top: 50px;
 }
 
 .todo-container{
     margin-top: 10px;
 }
+
+.todo-text{
+    font-size: 1.2em;
+    font-family: Roboto, sans-serif;
+    color: #313131;
+}
+
+.pt{
+    padding-top: 10px !important;
+}
+
+.plus{
+    font-size: 15px;
+    width: 40px;
+    height: 40px;
+}
+
+
