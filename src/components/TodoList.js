@@ -1,34 +1,35 @@
 import React, { Component } from 'react';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-import $ from 'jquery';
-import TodoItem from './TodoItem'
-
-import 'bootstrap/dist/css/bootstrap.css';
-import '@fortawesome/fontawesome-free/css/all.css';
-import '../style.css';
+import axios from 'axios';
+import TodoItem from './TodoItem';
 
 class TodoList extends Component {
-    componentDidMount()
-	{ 
-		$('[data-toggle="tooltip"]').tooltip({
-            placement:"top", 
-            title:"Add TODO", 
-            trigger:"hover", 
-            delay: { 'show': 600 }
-        });
+    constructor(){
+        super();
+        this.state = {todos:[]};
+    }
+
+    componentDidMount(){
+        axios.get('https://jsonplaceholder.typicode.com/todos?userId=1', {headers:{'Content-Type':'application/json;'}})
+			.then(res=>{
+                this.setState({todos:res.data});
+			});
+    }
+    
+    displayTodos(){
+        return this.state.todos.map(todo => 
+            <TodoItem 
+                key={todo.id} 
+                id={todo.id} 
+                todoTitle={todo.title} 
+                completed={todo.completed}
+                />
+            );
     }
 
     render() {
         return (
-            <div className="container">
-                <div className="clearfix">
-                    <button className="btn btn-primary float-right rounded-circle plus" data-toggle="tooltip">
-                        <i className="fas fa-plus"></i>
-                    </button>
-                </div>
-                <div className="todo-container">
-                    <TodoItem/>
-                </div>
+            <div className="todo-container">
+                {this.displayTodos()}
             </div>
         )
     }
