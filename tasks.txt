@@ -1,0 +1,2 @@
+- Fix the warning from TodoItem:[line 16], read the warning in the DevTools' console.
+- Fix the border-bottom style property.
