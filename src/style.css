@@ -10,10 +10,6 @@
     left: -15px;
 }
 
-.far{
-    cursor: pointer;
-}
-
 .fa-trash-alt{
     color: rgb(245, 27, 27);
 }
@@ -33,16 +29,18 @@
     border-bottom-right-radius: 0.25em;
     margin-top: 50px;
     margin-bottom: 50px;
+    
 }
 
 .todo-container{
     margin-top: 10px;
 }
 
-.todo-text{
+.todo-title{
     font-size: 1.2em;
     font-family: Roboto, sans-serif;
     color: #313131;
+    user-select: none;
 }
 
 .pt{
@@ -55,4 +53,6 @@
     height: 40px;
 }
 
-
+.icon{
+    cursor: pointer;
+}
