@@ -1,7 +1,12 @@
 /* Imports */
-@import url('https://fonts.googleapis.com/css?family=Roboto:500');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500');
 
 /* Modifie some properties of third-party's classes */
+.container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .custom-control-label::before{
     border: #007bff solid 1px;
 }
@@ -23,22 +28,20 @@
 }
 
 /* Some Classes */
-.container:last-child{
-    border-bottom: 1px solid #0062cc;
-    border-bottom-left-radius: 0.25em;
-    border-bottom-right-radius: 0.25em;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    
-}
-
 .todo-container{
     margin-top: 10px;
+}
+
+.todo-container .row:last-child{
+    border-bottom: 1px solid #0062cc !important;
+    border-bottom-left-radius: 0.25em !important;
+    border-bottom-right-radius: 0.25em !important;
 }
 
 .todo-title{
     font-size: 1.2em;
     font-family: Roboto, sans-serif;
+    font-weight: 500;
     color: #313131;
     user-select: none;
 }
