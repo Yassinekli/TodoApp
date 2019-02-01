@@ -1,1 +1,4 @@
-- 
+- DragDrop event to order tasks
+- Toggle the star icon for more important tasks
+- Update a task
+- Delete a task
