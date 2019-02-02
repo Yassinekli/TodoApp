@@ -49,37 +49,33 @@ class TodoItem extends Component {
     
     dragStartHandler(e){
         this.setState({
-            id: this.state.id,
-            todoTitle: this.state.todoTitle,
+            id : this.state.id,
+            todoTitle : this.state.todoTitle,
             completed : this.state.completed,
-            dragStart : true
+            dragStart : true,
+            lastCursorY : e.clientY,
+            Y : 0
         })
     }
 
     dragHandler(e){
-        // console.log('X : ', e.clientX, ', Y : ', e.clientY);
-        if( this.state.Y && this.state.Y === e.clientY )
+        if(this.state.Y && this.state.lastCursorY === e.clientY)
             return;
-        
-        let targetStyle = window.getComputedStyle(e.target, null);
-        console.log(targetStyle.height);
-        
-        
-        let Y = e.clientY;
 
         this.setState({
-            id: this.state.id,
-            todoTitle: this.state.todoTitle,
+            id : this.state.id,
+            todoTitle : this.state.todoTitle,
             completed : this.state.completed,
             dragStart : true,
-            Y
+            lastCursorY : e.clientY,
+            Y : ((e.clientY - this.state.lastCursorY) + this.state.Y)
         });
     }
 
     dragEndHandler(e){
         this.setState({
-            id: this.state.id,
-            todoTitle: this.state.todoTitle,
+            id : this.state.id,
+            todoTitle : this.state.todoTitle,
             completed : this.state.completed,
             dragStart : false
         });
