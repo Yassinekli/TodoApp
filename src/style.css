@@ -30,6 +30,7 @@
 /* Some Classes */
 .todo-container{
     margin-top: 10px;
+    position: relative;
 }
 
 .todo-container .row:last-child{
@@ -58,4 +59,9 @@
 
 .icon{
     cursor: pointer;
+}
+
+.row{
+    margin: 0;
+    position: relative;
 }
