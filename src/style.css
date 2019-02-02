@@ -65,3 +65,11 @@
     margin: 0;
     position: relative;
 }
+
+.dragStyle{
+    background-color : #dde2ff;
+    z-index: 1000;
+    border-bottom: 1px solid #0062cc !important;
+    border-bottom-left-radius: 0.25em !important;
+    border-bottom-right-radius: 0.25em !important;
+}

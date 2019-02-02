@@ -27,12 +27,17 @@ class TodoItem extends Component {
         return titleStyle;
     }
 
+    getClassNames(){
+        let classNames = 'row border border-bottom-0 border-primary rounded';
+        if(this.state.dragStart)
+            return classNames.concat(' dragStyle');
+        return classNames;
+    }
+
     dragingPropStyle(){
         if(!this.state.dragStart)
             return;
         return {
-            background : '#dde2ff',
-            zIndex: 1000,
             top: this.state.Y + "px"
         }
     }
@@ -72,7 +77,7 @@ class TodoItem extends Component {
         });
     }
 
-    dragEndHandler(e){
+    dragEndHandler(){
         this.setState({
             id : this.state.id,
             todoTitle : this.state.todoTitle,
@@ -80,17 +85,17 @@ class TodoItem extends Component {
             dragStart : false
         });
     }
-    
+
     // Render Method
     render(){
         return (
             <div
-                className='row border border-bottom-0 border-primary rounded'
+                className={this.getClassNames()}
                 style={this.dragingPropStyle()}
                 draggable
                 onDragStart={(e)=>this.dragStartHandler(e)}
                 onDrag={(e)=>this.dragHandler(e)}
-                onDragEnd={(e)=>this.dragEndHandler(e)}
+                onDragEnd={()=>this.dragEndHandler()}
                 >
                 <div className="custom-control custom-checkbox text-truncate col pt">
                     <input 
