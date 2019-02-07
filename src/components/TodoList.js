@@ -116,6 +116,7 @@ class TodoList extends Component {
    dragEndHandler = (e)=>{
 		let todos = this.state.todos.slice();
 		todos.pop();
+
 		this.setState({
 			draggedId: null,
 			todos
