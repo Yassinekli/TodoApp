@@ -45,16 +45,6 @@ class TodoItem extends Component {
 		return { };
     }
 
-    // Event Handlers
-    changeHandler(){
-        this.setState({
-            id: this.state.id,
-            todoTitle: this.state.todoTitle,
-            completed : !this.state.completed
-        })
-    }
-    
-
     // Render Method
     render(){
         return (
@@ -75,7 +65,7 @@ class TodoItem extends Component {
                         className="custom-control-input" 
                         id={"cb" + this.state.id}
                         defaultChecked={this.state.completed}
-                        onChange={()=>this.changeHandler()}
+                        onChange={(e)=>this.props.changeHandler(e)}
                         />
                     <label 
                         className="custom-control-label pl-3 todo-title col"

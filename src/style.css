@@ -69,11 +69,14 @@
     opacity: 0;
 }
 
-/* 
-.dragStyle{
-    background-color : #dde2ff;
-    z-index: 1000;
-    border-bottom: 1px solid #0062cc !important;
-    border-bottom-left-radius: 0.25em !important;
-    border-bottom-right-radius: 0.25em !important;
-} */
+.custom-control-input:not(:disabled):active ~ .custom-control-label::before {
+    color: #fff;
+    background-color: #fff;
+    border-color: #007bff;
+}
+
+.custom-control-input:not(:disabled):active:checked ~ .custom-control-label::before {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}

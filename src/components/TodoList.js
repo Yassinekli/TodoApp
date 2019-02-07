@@ -40,6 +40,7 @@ class TodoList extends Component {
 				dragStartHandler={this.dragStartHandler}
 				dragEnterHandler={this.dragEnterHandler}
 				dragEndHandler={this.dragEndHandler}
+				changeHandler={this.changeHandler}
 			/>
 		);
 	}
@@ -120,6 +121,26 @@ class TodoList extends Component {
 			todos
 		});
    }
+
+	changeHandler = (e)=>{
+		let changedId = e.currentTarget.getAttribute('id');
+		let todos = this.state.todos.slice();
+
+		todos = todos.map(todo=>{
+			if(('cb' + todo.id) === changedId)
+				return {
+					id: todo.id,
+					title: todo.title,
+					completed : !todo.completed
+				};
+			return todo;
+		})
+		
+		this.setState({
+			draggedId: null,
+			todos
+		});
+  }
 
 	/* 
 		Render Method
