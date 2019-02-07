@@ -11,7 +11,7 @@ class App extends Component {
 
 	componentDidMount() { 
 		$('[data-toggle="tooltip"]').tooltip({
-            placement:"top", 
+            placement:"left", 
             title:"Add TODO", 
             trigger:"hover", 
             delay: { 'show': 600 }
