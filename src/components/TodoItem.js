@@ -18,7 +18,7 @@ class TodoItem extends Component {
     }
 
     getClassNames(draggedId){
-        let classNames = 'row border border-bottom-0 border-primary rounded';
+        let classNames = 'row border border-primary rounded';
         if(this.props.id.toString() === draggedId)
             return classNames.concat(' hide');
         return classNames;

@@ -141,7 +141,7 @@ class TodoList extends Component {
 			draggedId: null,
 			todos
 		});
-  }
+  	}
 
 	/* 
 		Render Method
