@@ -17,23 +17,21 @@ class TodoItem extends Component {
         return titleStyle;
     }
 
-    getClassNames(draggedId){
+    getClassNames(){
         let classNames = 'row border border-primary rounded';
-        if(this.props.id.toString() === draggedId)
+        if(this.props.id.toString() === this.props.draggedId)
             return classNames.concat(' hide');
         return classNames;
     }
 
     draggingPropsStyle(){
-        if(this.props.style.top)
+        if(this.props.id.toString() === (this.props.draggedId + 'c'))
 			return {
                 top:  this.props.style.top,
                 backgroundColor : '#dde2ff',
-                width: '100%',
-				position: 'absolute',
-				zIndex:'-1'
+                zIndex:'-1'
 			};
-		return { };
+		return {top:  this.props.style.top};
     }
 
     // Render Method
@@ -41,7 +39,7 @@ class TodoItem extends Component {
         return (
             <div
                 id={this.props.id}
-                className={this.getClassNames(this.props.draggedId)}
+                className={this.getClassNames()}
                 style={this.draggingPropsStyle()}
 
                 draggable

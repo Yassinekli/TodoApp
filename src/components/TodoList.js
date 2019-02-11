@@ -28,13 +28,13 @@ class TodoList extends Component {
 		Methods Helpers
 	*/
 	displayTodos(){
-		return this.state.todos.map(todo => 
+		return this.state.todos.map((todo, i) => 
 			<TodoItem
 				key={todo.id} 
 				id={todo.id} 
 				todoTitle={todo.title} 
 				completed={todo.completed}
-				style={{top: todo.top}}
+				style={(todo.id.toString().endsWith('c')) ? { top: todo.top } : { top: (43 * i) }}
 
 				draggedId={this.state.draggedId}
 				dragStartHandler={this.dragStartHandler}
@@ -147,9 +147,13 @@ class TodoList extends Component {
 		Render Method
 	*/
 	render() {
+		let todos = this.displayTodos();
+
 		return (
-			<div className="todo-container">
-				{this.displayTodos()}
+			<div 
+				className="todo-container" 
+				style={{height: (this.state.draggedId) ? ((todos.length - 1) * 43) : (todos.length * 43)}}>
+				{todos}
 			</div>
 		)
 	}
