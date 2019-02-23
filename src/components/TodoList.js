@@ -78,7 +78,7 @@ class TodoList extends Component {
 		if(hoveredId === this.state.lastHoveredId){
 			let top = window.getComputedStyle(e.currentTarget).top;
 			top = top.substring(0, top.length - 2);
-			if(top != ((this.state.lastOrderHovered - 1) * 43))
+			if(top !== ((this.state.lastOrderHovered - 1) * 43))
 				return;
 		}
 
@@ -155,7 +155,8 @@ class TodoList extends Component {
 				return {
 					id: todo.id,
 					title: todo.title,
-					completed : !todo.completed
+					completed : !todo.completed,
+					order : todo.order
 				};
 			return todo;
 		})
