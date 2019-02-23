@@ -29,7 +29,7 @@ class TodoItem extends Component {
 			return {
                 top:  this.props.style.top,
                 backgroundColor : '#dde2ff',
-                zIndex:'-1'
+                zIndex:(this.props.lastHoveredId) ? '1' : '-1'
 			};
 		return {top:  this.props.style.top};
     }

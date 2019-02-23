@@ -40,6 +40,7 @@ class TodoList extends Component {
 				todoTitle={todo.title} 
 				completed={todo.completed}
 				style={{ top: ((todo.order - 1) * 43) }}
+				lastHoveredId={this.state.lastHoveredId}
 
 				draggedId={this.state.draggedId}
 				dragStartHandler={this.dragStartHandler}
