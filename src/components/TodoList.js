@@ -54,97 +54,97 @@ class TodoList extends Component {
 	/* 
 		Handlers
 	*/
-   dragStartHandler = (e)=>{
-		let todos = this.state.todos.slice();
-		let clonedTodo = {...todos.find(todo => (todo.id.toString() === e.target.getAttribute('id')))}
+	dragStartHandler = (e)=>{
+			let todos = this.state.todos.slice();
+			let clonedTodo = {...todos.find(todo => (todo.id.toString() === e.target.getAttribute('id')))}
 
-		clonedTodo.id = clonedTodo.id + 'c';
+			clonedTodo.id = clonedTodo.id + 'c';
 
-		todos.push(clonedTodo);
-		
-		this.setState({
-			draggedId: e.target.getAttribute('id'),
-			lastHoveredId : null,
-			todos
-		})
-   }
-   
-   dragEnterHandler = (e)=>{
-		let hoveredId = e.currentTarget.getAttribute('id');
-		
-		if(hoveredId === this.state.draggedId || hoveredId.endsWith('c'))
-			return;
-
-		if(hoveredId === this.state.lastHoveredId){
-			let top = window.getComputedStyle(e.currentTarget).top;
-			top = top.substring(0, top.length - 2);
-			if(top !== ((this.state.lastOrderHovered - 1) * 43))
+			todos.push(clonedTodo);
+			
+			this.setState({
+				draggedId: e.target.getAttribute('id'),
+				lastHoveredId : null,
+				todos
+			})
+	}
+	
+	dragEnterHandler = (e)=>{
+			let hoveredId = e.currentTarget.getAttribute('id');
+			
+			if(hoveredId === this.state.draggedId || hoveredId.endsWith('c'))
 				return;
-		}
 
-		let orderDraggedElement = this.state.todos.find((box)=>(box.id.toString() === this.state.draggedId)).order;
-		let orderHoveredElement = this.state.todos.find((box)=>(box.id.toString() === hoveredId)).order;
-		
-		let todos = this.state.todos.slice();
-		let draggedTodos = [];
-		let draggedIndex;
-		let hoveredIndex;
+			if(hoveredId === this.state.lastHoveredId){
+				let top = window.getComputedStyle(e.currentTarget).top;
+				top = top.substring(0, top.length - 2);
+				if(top != ((this.state.lastOrderHovered - 1) * 43))
+					return;
+			}
 
-		if(orderDraggedElement > orderHoveredElement)
-		{
-			// console.log('object')
-			this.state.todos.forEach((todo, i)=>{
-				if(todo.id.toString().endsWith('c'))
-					return
-				if(todo.order === orderDraggedElement)
-					draggedIndex = i;
-				if(todo.order === orderHoveredElement)
-					hoveredIndex = i;
-				if(todo.order >= orderHoveredElement && todo.order < orderDraggedElement)
-					draggedTodos.push(todo);
-			})
+			let orderDraggedElement = this.state.todos.find((box)=>(box.id.toString() === this.state.draggedId)).order;
+			let orderHoveredElement = this.state.todos.find((box)=>(box.id.toString() === hoveredId)).order;
 			
-			todos[draggedIndex].order = todos[hoveredIndex].order;
-			draggedTodos.forEach(todo=>++todo.order);
-		}
-		else
-		{
-			// console.log('object 1')
-			this.state.todos.forEach((todo, i)=>{
-				if(todo.id.toString().endsWith('c'))
-					return
-				if(todo.order === orderDraggedElement)
-					draggedIndex = i;
-				if(todo.order === orderHoveredElement)
-					hoveredIndex = i;
-				if(todo.order > orderDraggedElement && todo.order <= orderHoveredElement)
-					draggedTodos.push(todo);
-			})
-			
-			todos[draggedIndex].order = todos[hoveredIndex].order;
-			draggedTodos.forEach(todo=>--todo.order);
-		}
+			let todos = this.state.todos.slice();
+			let draggedTodos = [];
+			let draggedIndex;
+			let hoveredIndex;
 
-		todos[todos.length - 1].order = todos[draggedIndex].order;
+			if(orderDraggedElement > orderHoveredElement)
+			{
+				// console.log('object')
+				this.state.todos.forEach((todo, i)=>{
+					if(todo.id.toString().endsWith('c'))
+						return
+					if(todo.order === orderDraggedElement)
+						draggedIndex = i;
+					if(todo.order === orderHoveredElement)
+						hoveredIndex = i;
+					if(todo.order >= orderHoveredElement && todo.order < orderDraggedElement)
+						draggedTodos.push(todo);
+				})
+				
+				todos[draggedIndex].order = todos[hoveredIndex].order;
+				draggedTodos.forEach(todo=>++todo.order);
+			}
+			else
+			{
+				// console.log('object 1')
+				this.state.todos.forEach((todo, i)=>{
+					if(todo.id.toString().endsWith('c'))
+						return
+					if(todo.order === orderDraggedElement)
+						draggedIndex = i;
+					if(todo.order === orderHoveredElement)
+						hoveredIndex = i;
+					if(todo.order > orderDraggedElement && todo.order <= orderHoveredElement)
+						draggedTodos.push(todo);
+				})
+				
+				todos[draggedIndex].order = todos[hoveredIndex].order;
+				draggedTodos.forEach(todo=>--todo.order);
+			}
 
-		this.setState({
-			draggedId: this.state.draggedId,
-			lastHoveredId : hoveredId,
-			lastOrderHovered: todos[hoveredIndex].order,
-			todos
-		});
-   }
-   
-   dragEndHandler = (e)=>{
-		let todos = this.state.todos.slice();
-		todos.pop();
+			todos[todos.length - 1].order = todos[draggedIndex].order;
 
-		this.setState({
-			draggedId: null,
-			lastHoveredId : null,
-			todos
-		});
-   }
+			this.setState({
+				draggedId: this.state.draggedId,
+				lastHoveredId : hoveredId,
+				lastOrderHovered: todos[hoveredIndex].order,
+				todos
+			});
+	}
+	
+	dragEndHandler = (e)=>{
+			let todos = this.state.todos.slice();
+			todos.pop();
+
+			this.setState({
+				draggedId: null,
+				lastHoveredId : null,
+				todos
+			});
+	}
 
 	changeHandler = (e)=>{
 		let changedId = e.currentTarget.getAttribute('id');
