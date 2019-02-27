@@ -9,7 +9,7 @@ class AddTodoForm extends Component {
 			modalContainerClassNames += " show-modal";
 		
 		return (
-			<div className={modalContainerClassNames} onClick={(e)=>{if(e.target.classList[0] === "modal-container")this.props.onClick();}}>
+			<div className={modalContainerClassNames} onClick={(e)=>{if(e.target.classList[0] === "modal-container" || e.target.classList[0] === "far")this.props.onClick();}}>
 				<div className="modal-form">
 					<div className="modal-head">
 						<span className="modal-close"><i className="far fa-times-circle"></i></span>
