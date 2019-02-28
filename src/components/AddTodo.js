@@ -7,7 +7,7 @@ class AddTodo extends Component {
 	constructor(){
 		super();
 		this.state = {
-			showModal: true
+			showModal: false
 		};
 	}
 	
@@ -29,8 +29,16 @@ class AddTodo extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<AddTodoModal showModal={this.state.showModal} onClick={()=>this.showAddTodoModal()}/>
-				<button className="btn btn-primary float-right rounded-circle plus" data-toggle="tooltip" onClick={()=>this.showAddTodoModal()}>
+				<AddTodoModal 
+					showModal={this.state.showModal} 
+					addNewTodo={this.props.addNewTodo} 
+					onClick={()=>this.showAddTodoModal()}
+				/>
+				<button 
+					className="btn btn-primary float-right rounded-circle plus" 
+					data-toggle="tooltip" 
+					onClick={()=>this.showAddTodoModal()}
+				>
 					<i className="fas fa-plus"></i>
 				</button>
 			</React.Fragment>

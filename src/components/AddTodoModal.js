@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class AddTodoForm extends Component {
-
+	
 	render() {
 		let modalContainerClassNames = "modal-container";
 
@@ -9,7 +9,11 @@ class AddTodoForm extends Component {
 			modalContainerClassNames += " show-modal";
 		
 		return (
-			<div className={modalContainerClassNames} onClick={(e)=>{if(e.target.classList[0] === "modal-container" || e.target.classList[0] === "far")this.props.onClick();}}>
+			<div className={modalContainerClassNames} onClick={(e)=>{
+						if(e.target.classList[0] === "modal-container" || e.target.classList[0] === "far")
+							this.props.onClick();
+					}
+				}>
 				<div className="modal-form">
 					<div className="modal-head">
 						<span className="modal-close"><i className="far fa-times-circle"></i></span>
@@ -18,7 +22,7 @@ class AddTodoForm extends Component {
 					<hr/>
 					<div className="modal-input clearfix">
 						<input type="text" className="form-control input-title" id="todoTitle"></input>
-						<button className="btn btn-primary btn-add">Add</button>
+						<button className="btn btn-primary btn-add" onClick={()=>this.props.addNewTodo()}>Add</button>
 					</div>
 				</div>
 			</div>
