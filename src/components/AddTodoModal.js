@@ -4,7 +4,10 @@ class AddTodoForm extends Component {
 
 	componentDidUpdate(){
 		if(this.props.showModal)
+		{
+			this.textInput.value = "";
 			this.textInput.focus();
+		}
 	}
 	
 	render() {
@@ -27,7 +30,7 @@ class AddTodoForm extends Component {
 					</div>
 					<hr/>
 					<div className="modal-input clearfix">
-						<input type="text" ref={elem=>this.textInput = elem} className="form-control input-title" id="todoTitle"></input>
+						<input type="text" ref={elem=>this.textInput = elem} className="form-control input-title" id="todoTitle" autoComplete="off"></input>
 						<button className="btn btn-primary btn-add" onClick={()=>this.props.addNewTodo()}>Add</button>
 					</div>
 				</div>
