@@ -178,38 +178,32 @@ class App extends Component {
 
 	addNewTodo = ()=>{
 		let todoTitle = document.getElementById('todoTitle');
-		if(todoTitle.value !== "")
-		{
-			fetch('https://jsonplaceholder.typicode.com/todos', {
-				method: 'POST',
-				body: JSON.stringify({
-					title: todoTitle.value,
-					completed: false,
-					userId: 1
-				}),
-				headers: {
-					"Content-type": "application/json; charset=UTF-8"
-				}
-			})
-			.then(response => response.json())
-			.then(json => {
-				let todos = this.state.todos.slice();
-				
-				json.order = todos.length + 1;
-				todos.push(json);
-	
-				this.setState({
-					draggedId: null,
-					lastHoveredId : null,
-					todos
-				});
-			})
-			.catch(err=>console.error(err));
-		}
-		else
-		{
-			console.log("Can't add an empty task title")
-		}
+		
+		fetch('https://jsonplaceholder.typicode.com/todos', {
+			method: 'POST',
+			body: JSON.stringify({
+				title: todoTitle.value.trim(),
+				completed: false,
+				userId: 1
+			}),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		})
+		.then(response => response.json())
+		.then(json => {
+			let todos = this.state.todos.slice();
+			
+			json.order = todos.length + 1;
+			todos.push(json);
+
+			this.setState({
+				draggedId: null,
+				lastHoveredId : null,
+				todos
+			});
+		})
+		.catch(err=>console.error(err));
 	}
 }
 

@@ -7,6 +7,7 @@ class AddTodoForm extends Component {
 		{
 			this.textInput.value = "";
 			this.textInput.focus();
+			this.btnAdd.disabled = true;
 		}
 	}
 	
@@ -30,8 +31,19 @@ class AddTodoForm extends Component {
 					</div>
 					<hr/>
 					<div className="modal-input clearfix">
-						<input type="text" ref={elem=>this.textInput = elem} className="form-control input-title" id="todoTitle" autoComplete="off"></input>
-						<button className="btn btn-primary btn-add" onClick={()=>this.props.addNewTodo()}>Add</button>
+						<input 
+							type="text" 
+							ref={elem=>this.textInput = elem} 
+							className="form-control input-title" 
+							id="todoTitle" 
+							autoComplete="off"
+							onInput={()=>{this.btnAdd.disabled = (this.textInput.value.trim().length === 0)}}
+						></input>
+						<button 
+							className="btn btn-primary btn-add" 
+							ref={elem=>this.btnAdd = elem} 
+							onClick={()=>this.props.addNewTodo()}
+						>Add</button>
 					</div>
 				</div>
 			</div>
