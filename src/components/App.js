@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import axios from 'axios';
 
 import AddTodo from './AddTodo';
 import TodoList from './TodoList';
@@ -34,7 +33,12 @@ class App extends Component {
 					dragStartHandler={this.dragStartHandler}
 					dragEnterHandler={this.dragEnterHandler}
 					dragEndHandler={this.dragEndHandler}
+
 					changeHandler={this.changeHandler}
+					
+					starHandler={this.starHandler}
+					updateTodoHandler={this.updateTodoHandler}
+					deleteTodoHandler={this.deleteTodoHandler}
 				/>
             </div>
 		);
@@ -44,17 +48,19 @@ class App extends Component {
 		Lifecycle Methods
 	*/
 	componentDidMount(){
-		axios.get('https://jsonplaceholder.typicode.com/todos?userId=1', {headers:{'Content-Type':'application/json;'}})
-		.then(res=>{
+		fetch('https://jsonplaceholder.typicode.com/todos?userId=1', {headers:{'Content-Type':'application/json;'}})
+		.then(res=>res.json())
+		.then(json=>{
 			let i = 1;
-			for (const todo of res.data) {
+			for (const todo of json) {
 				todo.order = i;
 				i++;
 			}
+			
 			this.setState({
 				draggedId: null,
 				lastHoveredId : null,
-				todos:res.data
+				todos:json
 			});
 		});
 	}
@@ -86,7 +92,7 @@ class App extends Component {
 		if(hoveredId === this.state.lastHoveredId){
 			let top = window.getComputedStyle(e.currentTarget).top;
 			top = top.substring(0, top.length - 2);
-			if(top != ((this.state.lastOrderHovered - 1) * 43))
+			if(top !== ((this.state.lastOrderHovered - 1) * 43).toString())
 				return;
 		}
 
@@ -100,7 +106,6 @@ class App extends Component {
 
 		if(orderDraggedElement > orderHoveredElement)
 		{
-			// console.log('object')
 			this.state.todos.forEach((todo, i)=>{
 				if(todo.id.toString().endsWith('c'))
 					return
@@ -117,7 +122,6 @@ class App extends Component {
 		}
 		else
 		{
-			// console.log('object 1')
 			this.state.todos.forEach((todo, i)=>{
 				if(todo.id.toString().endsWith('c'))
 					return
@@ -143,7 +147,7 @@ class App extends Component {
 		});
 	}
 	
-	dragEndHandler = (e)=>{
+	dragEndHandler = ()=>{
 		let todos = this.state.todos.slice();
 		todos.pop();
 
@@ -204,6 +208,42 @@ class App extends Component {
 			});
 		})
 		.catch(err=>console.error(err));
+	}
+
+	starHandler = (e)=>{
+		let clickedTodoId = e.currentTarget.parentNode.getAttribute('id');
+		let todos = this.state.todos.slice();
+		let clickedTodo = todos.find(todo=>(todo.id.toString() === clickedTodoId));
+		
+		let lengthOfTodosToChange = 0;
+
+		for (let i = 0; i < todos.length; i++)
+		{
+			let currentTodo = todos[i];
+			if(lengthOfTodosToChange === clickedTodo.order)
+				break;
+			if(currentTodo.order >= 1 && currentTodo.order < clickedTodo.order)
+			{
+				++currentTodo.order;
+				++lengthOfTodosToChange;
+			}
+		}
+
+		clickedTodo.order = 1;
+
+		this.setState({
+			draggedId: null,
+			lastHoveredId : null,
+			todos
+		});
+	}
+
+	updateTodoHandler = (e)=>{
+		
+	}
+
+	deleteTodoHandler = (e)=>{
+		
 	}
 }
 

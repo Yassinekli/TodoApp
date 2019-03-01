@@ -19,7 +19,12 @@ class TodoList extends Component {
 				dragStartHandler={this.props.dragStartHandler}
 				dragEnterHandler={this.props.dragEnterHandler}
 				dragEndHandler={this.props.dragEndHandler}
+				
 				changeHandler={this.props.changeHandler}
+
+				starHandler={this.props.starHandler}
+				updateTodoHandler={this.props.updateTodoHandler}
+				deleteTodoHandler={this.props.deleteTodoHandler}
 			/>
 		);
 	}
