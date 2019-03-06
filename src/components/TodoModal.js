@@ -1,49 +1,52 @@
 import React, { Component } from 'react';
 
-class AddTodoForm extends Component {
+class TodoModal extends Component {
 
 	componentDidUpdate(){
-		if(this.props.showModal)
+		if(this.props.modal.show)
 		{
-			this.textInput.value = "";
+			let textLength = this.textInput.value.length;
 			this.textInput.focus();
-			this.btnAdd.disabled = true;
+			this.textInput.setSelectionRange(textLength, textLength);
+			this.btnSubmit.disabled = (textLength === 0);
 		}
 	}
 	
 	render() {
 		let modalContainerClassNames = "modal-container";
 
-		if(this.props.showModal)
+		if(this.props.modal.show)
 			modalContainerClassNames += " show-modal";
 		
 		return (
 			<div className={modalContainerClassNames} onClick={(e)=>{
 				if(e.target.classList[0] === "modal-container" || e.target.classList[0] === "far")
-					this.props.onClick();
+					this.props.toggleTodoModal({option: '', todoTitle: ''});
 				}
 			}
 			>
 				<div className="modal-form">
 					<div className="modal-head">
 						<span className="modal-close"><i className="far fa-times-circle"></i></span>
-						<h4>Add a task</h4>
+						<h4 style={{fontSize: '1.2rem'}}>
+							{this.props.modal.option} TASK
+						</h4>
 					</div>
 					<hr/>
 					<div className="modal-input clearfix">
 						<input 
 							type="text" 
 							ref={elem=>this.textInput = elem} 
-							className="form-control input-title" 
-							id="todoTitle" 
+							className="form-control input-title"
 							autoComplete="off"
-							onInput={()=>{this.btnAdd.disabled = (this.textInput.value.trim().length === 0)}}
-						></input>
+							defaultValue={this.props.modal.todoTitle}
+							onInput={()=>{this.btnSubmit.disabled = (this.textInput.value.trim().length === 0)}}
+						/>
 						<button 
 							className="btn btn-primary btn-add" 
-							ref={elem=>this.btnAdd = elem} 
-							onClick={()=>this.props.addNewTodo()}
-						>Add</button>
+							ref={elem=>this.btnSubmit = elem} 
+							onClick={()=>this.props.submitTodo(this.btnSubmit.value)}
+						>{this.props.modal.option}</button>
 					</div>
 				</div>
 			</div>
@@ -51,4 +54,4 @@ class AddTodoForm extends Component {
 	}
 }
 
-export default AddTodoForm;
+export default TodoModal;

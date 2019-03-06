@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import $ from 'jquery';
 
-import AddTodo from './AddTodo';
+import TodoModal from './TodoModal';
 import TodoList from './TodoList';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -13,6 +14,13 @@ class App extends Component {
 	constructor(){
 		super();
 		this.state = {
+			modal: {
+				show: false,
+				options: {
+					option: '',
+					todoTitle: ''
+				}
+			},
 			draggedId: null,
 			lastHoveredId : null,
 			todos: []
@@ -23,7 +31,19 @@ class App extends Component {
 		return (
 			<div className="container">
                 <div className="clearfix">
-                    <AddTodo addNewTodo={this.addNewTodo}/>
+					<TodoModal
+						modal={this.state.modal} 
+						addNewTodo={this.addNewTodo}
+						toggleTodoModal={this.toggleTodoModal}
+						submitTodo={this.submitTodo}
+					/>
+					<button 
+						className="btn btn-primary float-right rounded-circle plus"
+						data-toggle="tooltip" 
+						onClick={()=>this.toggleTodoModal({option: 'ADD', todoTitle: ''})}
+					>
+						<i className="fas fa-plus"></i>
+					</button>
                 </div>
 				<TodoList 
 					draggedId={this.state.draggedId} 
@@ -37,7 +57,7 @@ class App extends Component {
 					changeHandler={this.changeHandler}
 					
 					starHandler={this.starHandler}
-					updateTodoHandler={this.updateTodoHandler}
+					toggleTodoModal={this.toggleTodoModal}
 					deleteTodoHandler={this.deleteTodoHandler}
 				/>
             </div>
@@ -48,6 +68,13 @@ class App extends Component {
 		Lifecycle Methods
 	*/
 	componentDidMount(){
+		$('[data-toggle="tooltip"]').tooltip({
+			placement:"left", 
+			title:"Add TODO", 
+			trigger:"hover", 
+			delay: { 'show': 600 }
+		});
+
 		fetch('https://jsonplaceholder.typicode.com/todos?userId=1', {headers:{'Content-Type':'application/json;'}})
 		.then(res=>res.json())
 		.then(json=>{
@@ -180,34 +207,41 @@ class App extends Component {
 		});
 	}
 
-	addNewTodo = ()=>{
-		let todoTitle = document.getElementById('todoTitle');
-		
-		fetch('https://jsonplaceholder.typicode.com/todos', {
-			method: 'POST',
-			body: JSON.stringify({
-				title: todoTitle.value.trim(),
-				completed: false,
-				userId: 1
-			}),
-			headers: {
-				"Content-type": "application/json; charset=UTF-8"
-			}
-		})
-		.then(response => response.json())
-		.then(json => {
-			let todos = this.state.todos.slice();
+	submitTodo = (btnClicked)=>{
+		if(btnClicked === "ADD")
+		{
+			let todoTitle = document.getElementById('todoTitle');
 			
-			json.order = todos.length + 1;
-			todos.push(json);
-
-			this.setState({
-				draggedId: null,
-				lastHoveredId : null,
-				todos
-			});
-		})
-		.catch(err=>console.error(err));
+			fetch('https://jsonplaceholder.typicode.com/todos', {
+				method: 'POST',
+				body: JSON.stringify({
+					title: todoTitle.value.trim(),
+					completed: false,
+					userId: 1
+				}),
+				headers: {
+					"Content-type": "application/json; charset=UTF-8"
+				}
+			})
+			.then(response => response.json())
+			.then(json => {
+				let todos = this.state.todos.slice();
+				
+				json.order = todos.length + 1;
+				todos.push(json);
+	
+				this.setState({
+					draggedId: null,
+					lastHoveredId : null,
+					todos
+				});
+			})
+			.catch(err=>console.error(err));
+		}
+		else
+		{
+			console.log('object')
+		}
 	}
 
 	starHandler = (e)=>{
@@ -238,12 +272,24 @@ class App extends Component {
 		});
 	}
 
-	updateTodoHandler = (e)=>{
+	deleteTodoHandler = (e)=>{
 		
 	}
 
-	deleteTodoHandler = (e)=>{
-		
+	/*
+		Methods
+	*/
+	toggleTodoModal = (modalOptions)=>{
+		this.setState({
+			modal: {
+				show: !this.state.modal.show,
+				option: modalOptions.option,
+				todoTitle: modalOptions.todoTitle
+			},
+			draggedId: null,
+			lastHoveredId : null,
+			todos: this.state.todos
+		});
 	}
 }
 

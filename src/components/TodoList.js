@@ -23,7 +23,7 @@ class TodoList extends Component {
 				changeHandler={this.props.changeHandler}
 
 				starHandler={this.props.starHandler}
-				updateTodoHandler={this.props.updateTodoHandler}
+				toggleTodoModal={this.props.toggleTodoModal}
 				deleteTodoHandler={this.props.deleteTodoHandler}
 			/>
 		);
