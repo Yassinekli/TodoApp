@@ -21,7 +21,7 @@ class TodoModal extends Component {
 		return (
 			<div className={modalContainerClassNames} onClick={(e)=>{
 				if(e.target.classList[0] === "modal-container" || e.target.classList[0] === "far")
-					this.props.toggleTodoModal({option: '', todoTitle: ''});
+					this.props.toggleTodoModal({show: false, option: '', todoTitle: ''});
 				}
 			}
 			>
@@ -36,6 +36,7 @@ class TodoModal extends Component {
 					<div className="modal-input clearfix">
 						<input 
 							type="text" 
+							id="todoTitle"
 							ref={elem=>this.textInput = elem} 
 							className="form-control input-title"
 							autoComplete="off"

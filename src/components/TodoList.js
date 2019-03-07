@@ -8,8 +8,8 @@ class TodoList extends Component {
 	displayTodos(){
 		return this.props.todos.map(todo =>
 			<TodoItem
-				key={todo.id} 
-				id={todo.id} 
+				key={todo._id} 
+				id={todo._id} 
 				todoTitle={todo.title} 
 				completed={todo.completed}
 				style={{ top: ((todo.order - 1) * 43) }}
