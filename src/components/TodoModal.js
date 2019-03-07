@@ -5,6 +5,11 @@ class TodoModal extends Component {
 	componentDidUpdate(){
 		if(this.props.modal.show)
 		{
+			this.textInput.value = "";
+			
+			if(this.props.modal.option === 'EDIT')
+				this.textInput.value = this.props.modal.todoTitle;
+			
 			let textLength = this.textInput.value.length;
 			this.textInput.focus();
 			this.textInput.setSelectionRange(textLength, textLength);
@@ -40,7 +45,6 @@ class TodoModal extends Component {
 							ref={elem=>this.textInput = elem} 
 							className="form-control input-title"
 							autoComplete="off"
-							defaultValue={this.props.modal.todoTitle}
 							onInput={()=>{this.btnSubmit.disabled = (this.textInput.value.trim().length === 0)}}
 						/>
 						<button 

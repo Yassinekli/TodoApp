@@ -206,33 +206,33 @@ class App extends Component {
 	}
 
 	submitTodo = (btnClicked)=>{
-		let todoTitle = document.getElementById('todoTitle');
 		
-		fetch('http://localhost:3001/todos', {
-			method: 'POST',
-			body: JSON.stringify({
-				title: todoTitle.value.trim(),
-				completed: false
-			}),
-			headers: {
-				"Content-type": "application/json; charset=UTF-8"
-			}
-		})
-		.then(response => response.json())
-		.then(json => {
-			console.log(json)
-			/* let todos = this.state.todos.slice();
+			let todoTitle = document.getElementById('todoTitle');
 			
-			json.order = todos.length + 1;
-			todos.push(json);
+			fetch('http://localhost:3001/todos', {
+				method: 'POST',
+				body: JSON.stringify({
+					title: todoTitle.value.trim(),
+					completed: false
+				}),
+				headers: {
+					"Content-type": "application/json; charset=UTF-8"
+				}
+			})
+			.then(response => response.json())
+			.then(json => {
+				let todos = this.state.todos.slice();
 
-			this.setState({
-				draggedId: null,
-				lastHoveredId : null,
-				todos
-			}); */
-		})
-		.catch(err=>console.error(err));
+				todos.push(json);
+	
+				this.setState({
+					draggedId: null,
+					lastHoveredId : null,
+					todos
+				});
+			})
+			.catch(err=>console.error(err));
+		
 	}
 
 	starHandler = (e)=>{
