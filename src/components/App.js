@@ -263,8 +263,22 @@ class App extends Component {
 		});
 	}
 
-	deleteTodoHandler = (e)=>{
-		
+	deleteTodoHandler = (deleteTodoId)=>{
+		fetch('http://localhost:3001/todos', {
+			method: 'DELETE',
+			body: JSON.stringify({
+				deleteTodoId
+			}),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		})
+		.then((res)=>res.json())
+		.then((deletedTodo)=>{
+			console.log('deletedTodo');
+			console.log(deletedTodo);
+		})
+		.catch(err=>console.error(err));
 	}
 
 	/*
