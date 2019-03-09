@@ -45,13 +45,13 @@ class TodoModal extends Component {
 							ref={elem=>this.textInput = elem} 
 							className="form-control input-title"
 							autoComplete="off"
-							onKeyUp={(e)=>{if(e.key.toUpperCase() === "ENTER") this.props.submitTodo(this.props.modal.option)}}
+							onKeyUp={(e)=>{if(e.key.toUpperCase() === "ENTER") this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId})}}
 							onInput={()=>{this.btnSubmit.disabled = (this.textInput.value.trim().length === 0)}}
 						/>
 						<button 
 							className="btn btn-primary btn-add" 
 							ref={elem=>this.btnSubmit = elem}
-							onClick={()=>this.props.submitTodo(this.props.modal.option)}
+							onClick={()=>this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId})}
 						>{this.props.modal.option}</button>
 					</div>
 				</div>

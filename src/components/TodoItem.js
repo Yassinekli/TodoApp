@@ -63,7 +63,7 @@ class TodoItem extends Component {
                         >{this.props.todoTitle}</label>
                 </div>
                 <span className="p-2 pt" onClick={(e)=>this.props.starHandler(e)}><i className="far fa-star fa-lg icon"></i></span>
-                <span className="p-2 pt"  onClick={()=>this.props.toggleTodoModal({show: true, option: 'EDIT', todoTitle: this.props.todoTitle})}><i className="far fa-edit fa-lg icon"></i></span>
+                <span className="p-2 pt"  onClick={()=>this.props.toggleTodoModal({show: true, option: 'EDIT', todoId: this.props.id, todoTitle: this.props.todoTitle})}><i className="far fa-edit fa-lg icon"></i></span>
                 <span className="p-2 pr-3 pt"  onClick={()=>this.props.deleteTodoHandler({_id: this.props.id, order: this.props.order})}><i className="far fa-trash-alt fa-lg icon"></i></span>
             </div>
         )

@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import React, { Component } from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import $ from 'jquery';
@@ -17,6 +18,7 @@ class App extends Component {
 			modal: {
 				show: false,
 				option: '',
+				todoId: null,
 				todoTitle: ''
 			},
 			draggedId: null,
@@ -38,7 +40,7 @@ class App extends Component {
 					<button 
 						className="btn btn-primary float-right rounded-circle plus"
 						data-toggle="tooltip" 
-						onClick={()=>this.toggleTodoModal({show: true, option: 'ADD', todoTitle: ''})}
+						onClick={()=>this.toggleTodoModal({show: true, option: 'ADD', todoId: null, todoTitle: ''})}
 					>
 						<i className="fas fa-plus"></i>
 					</button>
@@ -84,6 +86,7 @@ class App extends Component {
 				modal: {
 					show: false,
 					option: '',
+					todoId: null,
 					todoTitle: ''
 				},
 				draggedId: null,
@@ -108,6 +111,7 @@ class App extends Component {
 			modal: {
 				show: false,
 				option: '',
+				todoId: null,
 				todoTitle: ''
 			},
 			draggedId: e.target.getAttribute('id'),
@@ -176,6 +180,7 @@ class App extends Component {
 			modal: {
 				show: false,
 				option: '',
+				todoId: null,
 				todoTitle: ''
 			},
 			draggedId: this.state.draggedId,
@@ -193,6 +198,7 @@ class App extends Component {
 			modal: {
 				show: false,
 				option: '',
+				todoId: null,
 				todoTitle: ''
 			},
 			draggedId: null,
@@ -220,6 +226,7 @@ class App extends Component {
 			modal: {
 				show: false,
 				option: '',
+				todoId: null,
 				todoTitle: ''
 			},
 			draggedId: null,
@@ -228,37 +235,56 @@ class App extends Component {
 		});
 	}
 
-	submitTodo = (btnClicked)=>{
+	submitTodo = ({option, todoId})=>{
 		let todoTitle = document.getElementById('todoTitle');
+		switch (option) {
+			case "ADD":
+				fetch('http://localhost:3001/todos', {
+					method: 'POST',
+					body: JSON.stringify({
+						title: todoTitle.value.trim(),
+						completed: false
+					}),
+					headers: {
+						"Content-type": "application/json; charset=UTF-8"
+					}
+				})
+				.then(res=>res.json())
+				.then(newTodo => {
+					let todos = this.state.todos.slice();
 		
-		fetch('http://localhost:3001/todos', {
-			method: 'POST',
-			body: JSON.stringify({
-				title: todoTitle.value.trim(),
-				completed: false
-			}),
-			headers: {
-				"Content-type": "application/json; charset=UTF-8"
-			}
-		})
-		.then(response => response.json())
-		.then(json => {
-			let todos = this.state.todos.slice();
+					todos.push(newTodo);
+					
+					this.setState({
+						modal: {
+							show: true,
+							option,
+							_id: null,
+							todoTitle: ''
+						},
+						draggedId: null,
+						lastHoveredId : null,
+						todos
+					});
+				})
+				.catch(err=>console.error(err));
+			break;
 
-			todos.push(json);
-			
-			this.setState({
-				modal: {
-					show: true,
-					option: btnClicked,
-					todoTitle: ''
-				},
-				draggedId: null,
-				lastHoveredId : null,
-				todos
-			});
-		})
-		.catch(err=>console.error(err));
+			case "EDIT":
+				fetch('http://localhost:3001/todos', {
+					method: 'PUT',
+					body: JSON.stringify({
+						todoId,
+						title: todoTitle.value.trim(),
+					}),
+					headers: {
+						"Content-type": "application/json; charset=UTF-8"
+					}
+				})
+				.then(res=>res.json())
+				.then(feedback=>console.log(feedback));
+			break;
+		}
 	}
 
 	starHandler = (e)=>{
@@ -285,10 +311,9 @@ class App extends Component {
 		this.setState({
 			modal: {
 				show: false,
-				options: {
-					option: '',
-					todoTitle: ''
-				}
+				option: '',
+				todoId: null,
+				todoTitle: ''
 			},
 			draggedId: null,
 			lastHoveredId : null,
@@ -322,6 +347,7 @@ class App extends Component {
 					modal: {
 						show: false,
 						option: '',
+						todoId: null,
 						todoTitle: ''
 					},
 					draggedId: null,
@@ -336,12 +362,13 @@ class App extends Component {
 	/*
 		Methods
 	*/
-	toggleTodoModal = (modalOptions)=>{
+	toggleTodoModal = ({show, option, todoId, todoTitle})=>{
 		this.setState({
 			modal: {
-				show: modalOptions.show,
-				option: modalOptions.option,
-				todoTitle: modalOptions.todoTitle
+				show,
+				option,
+				todoId,
+				todoTitle
 			},
 			draggedId: null,
 			lastHoveredId : null,
