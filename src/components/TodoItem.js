@@ -27,11 +27,11 @@ class TodoItem extends Component {
     draggingPropsStyle(){
         if(this.props.id === (this.props.draggedId + 'c'))
 			return {
-                top:  this.props.style.top,
+                top:  ((this.props.order - 1) * 43),
                 backgroundColor : '#dde2ff',
                 zIndex:(this.props.lastHoveredId) ? '1' : '-1'
 			};
-		return {top:  this.props.style.top};
+		return {top:  ((this.props.order - 1) * 43)};
     }
 
     // Render Method
@@ -64,7 +64,7 @@ class TodoItem extends Component {
                 </div>
                 <span className="p-2 pt" onClick={(e)=>this.props.starHandler(e)}><i className="far fa-star fa-lg icon"></i></span>
                 <span className="p-2 pt"  onClick={()=>this.props.toggleTodoModal({show: true, option: 'EDIT', todoTitle: this.props.todoTitle})}><i className="far fa-edit fa-lg icon"></i></span>
-                <span className="p-2 pr-3 pt"  onClick={()=>this.props.deleteTodoHandler(this.props.id)}><i className="far fa-trash-alt fa-lg icon"></i></span>
+                <span className="p-2 pr-3 pt"  onClick={()=>this.props.deleteTodoHandler({_id: this.props.id, order: this.props.order})}><i className="far fa-trash-alt fa-lg icon"></i></span>
             </div>
         )
     }

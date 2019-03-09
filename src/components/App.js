@@ -83,6 +83,13 @@ class App extends Component {
 		.then(res=>res.json())
 		.then(json=>{
 			this.setState({
+				modal: {
+					show: false,
+					options: {
+						option: '',
+						todoTitle: ''
+					}
+				},
 				draggedId: null,
 				lastHoveredId : null,
 				todos:json
@@ -102,6 +109,13 @@ class App extends Component {
 		todos.push(clonedTodo);
 		
 		this.setState({
+			modal: {
+				show: false,
+				options: {
+					option: '',
+					todoTitle: ''
+				}
+			},
 			draggedId: e.target.getAttribute('id'),
 			lastHoveredId : null,
 			todos
@@ -165,6 +179,13 @@ class App extends Component {
 		todos[todos.length - 1].order = todos[draggedIndex].order;
 
 		this.setState({
+			modal: {
+				show: false,
+				options: {
+					option: '',
+					todoTitle: ''
+				}
+			},
 			draggedId: this.state.draggedId,
 			lastHoveredId : hoveredId,
 			lastOrderHovered: todos[hoveredIndex].order,
@@ -177,6 +198,13 @@ class App extends Component {
 		todos.pop();
 
 		this.setState({
+			modal: {
+				show: false,
+				options: {
+					option: '',
+					todoTitle: ''
+				}
+			},
 			draggedId: null,
 			lastHoveredId : null,
 			todos
@@ -199,6 +227,13 @@ class App extends Component {
 		})
 		
 		this.setState({
+			modal: {
+				show: false,
+				options: {
+					option: '',
+					todoTitle: ''
+				}
+			},
 			draggedId: null,
 			lastHoveredId : null,
 			todos
@@ -226,6 +261,13 @@ class App extends Component {
 				todos.push(json);
 	
 				this.setState({
+					modal: {
+						show: false,
+						options: {
+							option: '',
+							todoTitle: ''
+						}
+					},
 					draggedId: null,
 					lastHoveredId : null,
 					todos
@@ -257,26 +299,54 @@ class App extends Component {
 		clickedTodo.order = 1;
 
 		this.setState({
+			modal: {
+				show: false,
+				options: {
+					option: '',
+					todoTitle: ''
+				}
+			},
 			draggedId: null,
 			lastHoveredId : null,
 			todos
 		});
 	}
 
-	deleteTodoHandler = (deleteTodoId)=>{
+	deleteTodoHandler = ({_id, order})=>{
 		fetch('http://localhost:3001/todos', {
 			method: 'DELETE',
 			body: JSON.stringify({
-				deleteTodoId
+				_id,
+				order
 			}),
 			headers: {
 				"Content-type": "application/json; charset=UTF-8"
 			}
 		})
 		.then((res)=>res.json())
-		.then((deletedTodo)=>{
-			console.log('deletedTodo');
-			console.log(deletedTodo);
+		.then((feedback)=>{
+			if(feedback && feedback[0].n === 1)
+			{
+				let todos = this.state.todos.slice();
+				todos = todos.filter(todo=>(todo.order !== order));
+				todos.forEach(todo=>{
+					if(todo.order > order)
+						todo.order--;
+				})
+				
+				this.setState({
+					modal: {
+						show: false,
+						options: {
+							option: '',
+							todoTitle: ''
+						}
+					},
+					draggedId: null,
+					lastHoveredId : null,
+					todos
+				})
+			}
 		})
 		.catch(err=>console.error(err));
 	}

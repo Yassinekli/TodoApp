@@ -12,7 +12,7 @@ class TodoList extends Component {
 				id={todo._id} 
 				todoTitle={todo.title} 
 				completed={todo.completed}
-				style={{ top: ((todo.order - 1) * 43) }}
+				order={todo.order}
 				lastHoveredId={this.props.lastHoveredId}
 
 				draggedId={this.props.draggedId}
