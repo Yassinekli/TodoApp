@@ -16,10 +16,8 @@ class App extends Component {
 		this.state = {
 			modal: {
 				show: false,
-				options: {
-					option: '',
-					todoTitle: ''
-				}
+				option: '',
+				todoTitle: ''
 			},
 			draggedId: null,
 			lastHoveredId : null,
@@ -85,10 +83,8 @@ class App extends Component {
 			this.setState({
 				modal: {
 					show: false,
-					options: {
-						option: '',
-						todoTitle: ''
-					}
+					option: '',
+					todoTitle: ''
 				},
 				draggedId: null,
 				lastHoveredId : null,
@@ -111,10 +107,8 @@ class App extends Component {
 		this.setState({
 			modal: {
 				show: false,
-				options: {
-					option: '',
-					todoTitle: ''
-				}
+				option: '',
+				todoTitle: ''
 			},
 			draggedId: e.target.getAttribute('id'),
 			lastHoveredId : null,
@@ -181,10 +175,8 @@ class App extends Component {
 		this.setState({
 			modal: {
 				show: false,
-				options: {
-					option: '',
-					todoTitle: ''
-				}
+				option: '',
+				todoTitle: ''
 			},
 			draggedId: this.state.draggedId,
 			lastHoveredId : hoveredId,
@@ -200,10 +192,8 @@ class App extends Component {
 		this.setState({
 			modal: {
 				show: false,
-				options: {
-					option: '',
-					todoTitle: ''
-				}
+				option: '',
+				todoTitle: ''
 			},
 			draggedId: null,
 			lastHoveredId : null,
@@ -229,10 +219,8 @@ class App extends Component {
 		this.setState({
 			modal: {
 				show: false,
-				options: {
-					option: '',
-					todoTitle: ''
-				}
+				option: '',
+				todoTitle: ''
 			},
 			draggedId: null,
 			lastHoveredId : null,
@@ -241,40 +229,36 @@ class App extends Component {
 	}
 
 	submitTodo = (btnClicked)=>{
+		let todoTitle = document.getElementById('todoTitle');
 		
-			let todoTitle = document.getElementById('todoTitle');
-			
-			fetch('http://localhost:3001/todos', {
-				method: 'POST',
-				body: JSON.stringify({
-					title: todoTitle.value.trim(),
-					completed: false
-				}),
-				headers: {
-					"Content-type": "application/json; charset=UTF-8"
-				}
-			})
-			.then(response => response.json())
-			.then(json => {
-				let todos = this.state.todos.slice();
+		fetch('http://localhost:3001/todos', {
+			method: 'POST',
+			body: JSON.stringify({
+				title: todoTitle.value.trim(),
+				completed: false
+			}),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		})
+		.then(response => response.json())
+		.then(json => {
+			let todos = this.state.todos.slice();
 
-				todos.push(json);
-	
-				this.setState({
-					modal: {
-						show: false,
-						options: {
-							option: '',
-							todoTitle: ''
-						}
-					},
-					draggedId: null,
-					lastHoveredId : null,
-					todos
-				});
-			})
-			.catch(err=>console.error(err));
-		
+			todos.push(json);
+			
+			this.setState({
+				modal: {
+					show: true,
+					option: btnClicked,
+					todoTitle: ''
+				},
+				draggedId: null,
+				lastHoveredId : null,
+				todos
+			});
+		})
+		.catch(err=>console.error(err));
 	}
 
 	starHandler = (e)=>{
@@ -333,14 +317,12 @@ class App extends Component {
 					if(todo.order > order)
 						todo.order--;
 				})
-				
+
 				this.setState({
 					modal: {
 						show: false,
-						options: {
-							option: '',
-							todoTitle: ''
-						}
+						option: '',
+						todoTitle: ''
 					},
 					draggedId: null,
 					lastHoveredId : null,
