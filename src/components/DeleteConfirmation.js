@@ -12,9 +12,8 @@ class DeleteConfirmation extends Component {
 	render() {
 		let classNames = "confirm-delete px-2 pt";
 		if(this.props.visibility)
-		{
 			classNames += " confirm-delete-show";
-		}
+		
 
 		return (
 			<span className={classNames}>

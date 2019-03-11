@@ -269,8 +269,6 @@ class App extends Component {
 							todos
 						});
 					}
-					else
-						console.log('object')
 				})
 				.catch(err=>console.error(err));
 			break;

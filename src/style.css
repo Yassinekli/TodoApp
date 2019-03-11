@@ -35,6 +35,14 @@
     color: rgb(245, 27, 27);
 }
 
+.alert-danger{
+    display: none;
+}
+
+.show-alert-danger{
+    display: block;
+}
+
 /* Some Classes */
 .todo-container{
     margin-top: 10px;
