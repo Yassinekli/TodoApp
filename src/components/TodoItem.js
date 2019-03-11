@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 
+import DeleteConfirmation from './DeleteConfirmation'
+
 class TodoItem extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            confirmationVisibility: false
+        };
+    }
+
     // Methods
     titleStyle(){
         let titleStyle = {
@@ -34,6 +43,12 @@ class TodoItem extends Component {
 		return {top:  ((this.props.order - 1) * 43)};
     }
 
+    toggleConfirmationModal = (visibility)=>{
+        this.setState({
+            confirmationVisibility: visibility
+        })
+    }
+
     // Render Method
     render(){
         return (
@@ -64,7 +79,13 @@ class TodoItem extends Component {
                 </div>
                 <span className="p-2 pt" onClick={(e)=>this.props.starHandler(e)}><i className="far fa-star fa-lg icon"></i></span>
                 <span className="p-2 pt"  onClick={()=>this.props.toggleTodoModal({show: true, option: 'EDIT', todoId: this.props.id, todoTitle: this.props.todoTitle})}><i className="far fa-edit fa-lg icon"></i></span>
-                <span className="p-2 pr-3 pt"  onClick={()=>this.props.deleteTodoHandler({_id: this.props.id, order: this.props.order})}><i className="far fa-trash-alt fa-lg icon"></i></span>
+                <span className="p-2 pr-3 pt"  onClick={()=>this.toggleConfirmationModal(true)}><i className="far fa-trash-alt fa-lg icon"></i></span>
+                <DeleteConfirmation
+                    visibility={this.state.confirmationVisibility}
+                    infoClickedTodo={{_id: this.props.id, order: this.props.order}}
+                    onConfirmDelete={this.props.deleteTodoHandler}
+                    onCancelDelete={this.toggleConfirmationModal}
+                />
             </div>
         )
     }

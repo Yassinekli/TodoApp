@@ -27,6 +27,14 @@
     color: #62a0df;
 }
 
+.fa-check-circle{
+    color: rgb(55, 168, 41);
+}
+
+.pt .fa-times-circle{
+    color: rgb(245, 27, 27);
+}
+
 /* Some Classes */
 .todo-container{
     margin-top: 10px;
@@ -67,6 +75,19 @@
     transition-property: top;
     transition-duration: .3s;
     transition-timing-function: linear;
+}
+
+.confirm-delete{
+    background-color: #dde2ff;
+    position: relative;
+    left: 200px;
+    border-left: 1px solid #007bff;
+    display: none;
+}
+
+.confirm-delete-show{
+    left: 0px;
+    display: block;
 }
 
 .hide{

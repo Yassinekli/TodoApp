@@ -39,7 +39,9 @@ class App extends Component {
 					/>
 					<button 
 						className="btn btn-primary float-right rounded-circle plus"
-						data-toggle="tooltip" 
+						data-toggle="tooltip"
+						title="Add TODO"
+						data-placement="left"
 						onClick={()=>this.toggleTodoModal({show: true, option: 'ADD', todoId: null, todoTitle: ''})}
 					>
 						<i className="fas fa-plus"></i>
@@ -69,8 +71,6 @@ class App extends Component {
 	*/
 	componentDidMount(){
 		$('[data-toggle="tooltip"]').tooltip({
-			placement:"left", 
-			title:"Add TODO", 
 			trigger:"hover", 
 			delay: { 'show': 600 }
 		});
@@ -251,38 +251,64 @@ class App extends Component {
 				})
 				.then(res=>res.json())
 				.then(newTodo => {
-					let todos = this.state.todos.slice();
-		
-					todos.push(newTodo);
-					
-					this.setState({
-						modal: {
-							show: true,
-							option,
-							_id: null,
-							todoTitle: ''
-						},
-						draggedId: null,
-						lastHoveredId : null,
-						todos
-					});
+					if(Object.getOwnPropertyNames(newTodo).length !== 0)
+					{
+						let todos = this.state.todos.slice();
+			
+						todos.push(newTodo);
+						
+						this.setState({
+							modal: {
+								show: true,
+								option,
+								_id: null,
+								todoTitle: ''
+							},
+							draggedId: null,
+							lastHoveredId : null,
+							todos
+						});
+					}
+					else
+						console.log('object')
 				})
 				.catch(err=>console.error(err));
 			break;
 
 			case "EDIT":
+				let newTitle = todoTitle.value.trim();
 				fetch('http://localhost:3001/todos', {
 					method: 'PUT',
 					body: JSON.stringify({
 						todoId,
-						title: todoTitle.value.trim(),
+						title: newTitle,
 					}),
 					headers: {
 						"Content-type": "application/json; charset=UTF-8"
 					}
 				})
 				.then(res=>res.json())
-				.then(feedback=>console.log(feedback));
+				.then(feedback=>{
+					if(feedback && feedback[0].n === 1)
+					{
+						let todos = this.state.todos.slice();
+						let updateTodo = todos.find(todo=>(todo._id === todoId));
+						updateTodo.title = newTitle;
+
+						this.setState({
+							modal: {
+								show: false,
+								option: '',
+								_id: null,
+								todoTitle: ''
+							},
+							draggedId: null,
+							lastHoveredId : null,
+							todos
+						});
+					}
+				})
+				.catch(err=>console.log(err));
 			break;
 		}
 	}

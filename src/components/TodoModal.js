@@ -51,7 +51,10 @@ class TodoModal extends Component {
 						<button 
 							className="btn btn-primary btn-add" 
 							ref={elem=>this.btnSubmit = elem}
-							onClick={()=>this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId})}
+							onClick={()=>{
+								this.btnSubmit.disabled = true;
+								this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId});
+							}}
 						>{this.props.modal.option}</button>
 					</div>
 				</div>
