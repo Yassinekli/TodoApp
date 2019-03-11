@@ -87,14 +87,11 @@
 
 .confirm-delete{
     background-color: #dde2ff;
-    position: relative;
-    left: 200px;
     border-left: 1px solid #007bff;
     display: none;
 }
 
 .confirm-delete-show{
-    left: 0px;
     display: block;
 }
 
