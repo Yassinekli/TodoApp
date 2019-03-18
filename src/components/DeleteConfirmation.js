@@ -25,13 +25,12 @@ class DeleteConfirmation extends Component {
 					onClick={()=>this.props.onCancelDelete(false)}
 					><i className="far fa-times-circle fa-lg icon"></i></span>
 				<span 
-					id="btnOK"
-					className="px-2"
+					className="btn-ok px-2"
 					data-toggle="tooltip"
 					title="Confirm Your Delete"
 					data-placement="top"
 					onClick={()=>{
-						$('#btnOK').tooltip('hide');
+						$('.btn-ok').tooltip('hide');
 						this.props.onConfirmDelete(this.props.infoClickedTodo);
 					}}
 				><i className="far fa-check-circle fa-lg icon"></i></span>
