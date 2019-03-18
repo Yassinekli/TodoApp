@@ -71,6 +71,11 @@
     height: 40px;
 }
 
+.btn-save{
+    position: relative;
+    top: -100px;
+}
+
 .icon{
     cursor: pointer;
 }

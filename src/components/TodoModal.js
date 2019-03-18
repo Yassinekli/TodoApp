@@ -11,7 +11,6 @@ class TodoModal extends Component {
 	componentWillUpdate(){
 		if(!this.props.modal.show && this.state.showAlert)
 		{
-			console.log('object')
 			this.setState({
 				showAlert: false
 			})
@@ -27,6 +26,7 @@ class TodoModal extends Component {
 				this.textInput.value = this.props.modal.todoTitle;
 			
 			let textLength = this.textInput.value.length;
+			this.textInput.disabled = false;
 			this.textInput.focus();
 			this.textInput.setSelectionRange(textLength, textLength);
 			this.btnSubmit.disabled = (textLength === 0 || this.textInput.value.trim() === this.props.modal.todoTitle);
@@ -65,7 +65,18 @@ class TodoModal extends Component {
 								if(e.key.toUpperCase() === "ENTER")
 								{
 									if(!this.btnSubmit.disabled)
-										this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId});
+									{
+										this.textInput.disabled = true;
+										this.btnSubmit.disabled = true;
+										this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId})
+										.then(res=>{
+											if(res === 1)
+												this.setState({
+													showAlert: false
+												})
+										})
+										.catch(res=>console.log(res));
+									}
 									else
 										this.setState({
 											showAlert: true
@@ -83,8 +94,16 @@ class TodoModal extends Component {
 							className="btn btn-primary btn-add" 
 							ref={elem=>this.btnSubmit = elem}
 							onClick={()=>{
+								this.textInput.disabled = true;
 								this.btnSubmit.disabled = true;
-								this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId});
+								this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId})
+								.then(res=>{
+									if(res === 1)
+										this.setState({
+											showAlert: false
+										})
+								})
+								.catch(res=>console.log(res));
 							}}
 						>{this.props.modal.option}</button>
 					</div>

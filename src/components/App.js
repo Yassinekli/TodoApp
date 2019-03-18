@@ -37,6 +37,7 @@ class App extends Component {
 						toggleTodoModal={this.toggleTodoModal}
 						submitTodo={this.submitTodo}
 					/>
+					<button className="btn btn-primary float-left btn-save">Save Changes</button>
 					<button 
 						className="btn btn-primary float-right rounded-circle plus"
 						data-toggle="tooltip"
@@ -237,78 +238,84 @@ class App extends Component {
 
 	submitTodo = ({option, todoId})=>{
 		let todoTitle = document.getElementById('todoTitle');
-		switch (option) {
-			case "ADD":
-				fetch('http://localhost:3001/todos', {
-					method: 'POST',
-					body: JSON.stringify({
-						title: todoTitle.value.trim(),
-						completed: false
-					}),
-					headers: {
-						"Content-type": "application/json; charset=UTF-8"
-					}
-				})
-				.then(res=>res.json())
-				.then(newTodo => {
-					if(Object.getOwnPropertyNames(newTodo).length !== 0)
-					{
-						let todos = this.state.todos.slice();
-			
-						todos.push(newTodo);
-						
-						this.setState({
-							modal: {
-								show: true,
-								option,
-								_id: null,
-								todoTitle: ''
-							},
-							draggedId: null,
-							lastHoveredId : null,
-							todos
-						});
-					}
-				})
-				.catch(err=>console.error(err));
-			break;
-
-			case "EDIT":
-				let newTitle = todoTitle.value.trim();
-				fetch('http://localhost:3001/todos', {
-					method: 'PUT',
-					body: JSON.stringify({
-						todoId,
-						title: newTitle,
-					}),
-					headers: {
-						"Content-type": "application/json; charset=UTF-8"
-					}
-				})
-				.then(res=>res.json())
-				.then(feedback=>{
-					if(feedback && feedback[0].n === 1)
-					{
-						let todos = this.state.todos.slice();
-						let updateTodo = todos.find(todo=>(todo._id === todoId));
-						updateTodo.title = newTitle;
-
-						this.setState({
-							modal: {
-								show: false,
-								option: '',
-								_id: null,
-								todoTitle: ''
-							},
-							draggedId: null,
-							lastHoveredId : null,
-							todos
-						});
-					}
-				})
-				.catch(err=>console.log(err));
-			break;
-		}
+		return new Promise((resolve, reject)=>{
+			switch (option) {
+				case "ADD":
+						fetch('http://localhost:3001/todos', {
+							method: 'POST',
+							body: JSON.stringify({
+								title: todoTitle.value.trim(),
+								completed: false
+							}),
+							headers: {
+								"Content-type": "application/json; charset=UTF-8"
+							}
+						})
+						.then(res=>res.json())
+						.then(newTodo => {
+							if(Object.getOwnPropertyNames(newTodo).length !== 0)
+							{
+								let todos = this.state.todos.slice();
+					
+								todos.push(newTodo);
+								
+								this.setState({
+									modal: {
+										show: true,
+										option,
+										_id: null,
+										todoTitle: ''
+									},
+									draggedId: null,
+									lastHoveredId : null,
+									todos
+								});
+								return resolve(1);
+							}
+							return resolve(-1);
+						})
+						.catch(err=>{console.error(err); return reject(0);});
+				break;
+	
+				case "EDIT":
+					let newTitle = todoTitle.value.trim();
+					fetch('http://localhost:3001/todos', {
+						method: 'PUT',
+						body: JSON.stringify({
+							todoId,
+							title: newTitle,
+						}),
+						headers: {
+							"Content-type": "application/json; charset=UTF-8"
+						}
+					})
+					.then(res=>res.json())
+					.then(feedback=>{
+						if(feedback && feedback[0].n === 1)
+						{
+							let todos = this.state.todos.slice();
+							let updateTodo = todos.find(todo=>(todo._id === todoId));
+							updateTodo.title = newTitle;
+	
+							this.setState({
+								modal: {
+									show: false,
+									option: '',
+									_id: null,
+									todoTitle: ''
+								},
+								draggedId: null,
+								lastHoveredId : null,
+								todos
+							});
+							return resolve(1);
+						}
+						return resolve(-1);
+					})
+					.catch(err=>{console.error(err); return reject(0);});
+				break;
+			}
+		})
 	}
 
 	starHandler = (e)=>{
