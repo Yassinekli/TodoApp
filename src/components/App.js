@@ -104,7 +104,7 @@ class App extends Component {
 		let todos = this.state.todos.slice();
 		let clonedTodo = {...todos.find(todo => (todo._id.toString() === e.target.getAttribute('id')))}
 
-		clonedTodo._id = clonedTodo._id + 'c';
+		clonedTodo._id = '#22#';
 
 		todos.push(clonedTodo);
 		
@@ -124,7 +124,7 @@ class App extends Component {
 	dragEnterHandler = (e)=>{
 		let hoveredId = e.currentTarget.getAttribute('id');
 		
-		if(hoveredId === this.state.draggedId || hoveredId.endsWith('c'))
+		if(hoveredId === this.state.draggedId || hoveredId === '#22#')
 			return;
 
 		if(hoveredId === this.state.lastHoveredId){
@@ -145,7 +145,7 @@ class App extends Component {
 		if(orderDraggedElement > orderHoveredElement)
 		{
 			this.state.todos.forEach((todo, i)=>{
-				if(todo._id.toString().endsWith('c'))
+				if(todo._id === '#22#')
 					return
 				if(todo.order === orderDraggedElement)
 					draggedIndex = i;
@@ -155,13 +155,16 @@ class App extends Component {
 					draggedTodos.push(todo);
 			})
 			
+			console.log(todos[draggedIndex])
+			console.log(todos[hoveredIndex])
+			
 			todos[draggedIndex].order = todos[hoveredIndex].order;
 			draggedTodos.forEach(todo=>++todo.order);
 		}
 		else
 		{
 			this.state.todos.forEach((todo, i)=>{
-				if(todo._id.toString().endsWith('c'))
+				if(todo._id === '#22#')
 					return
 				if(todo.order === orderDraggedElement)
 					draggedIndex = i;
@@ -270,11 +273,11 @@ class App extends Component {
 									lastHoveredId : null,
 									todos
 								});
-								return resolve(1);
+								return resolve();
 							}
-							return resolve(-1);
+							return reject("We got an issue to add this task, please try a few later.");
 						})
-						.catch(err=>{console.error(err); return reject(0);});
+						.catch(()=>reject("We got an issue to add this task, please try a few later."));
 				break;
 	
 				case "EDIT":
@@ -308,11 +311,11 @@ class App extends Component {
 								lastHoveredId : null,
 								todos
 							});
-							return resolve(1);
+							return resolve();
 						}
-						return resolve(-1);
+						return reject("We got an issue to edit this task, please try a few later.");
 					})
-					.catch(err=>{console.error(err); return reject(0);});
+					.catch(()=>reject("We got an issue to edit this task, please try a few later."));
 				break;
 			}
 		})

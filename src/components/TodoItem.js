@@ -34,7 +34,7 @@ class TodoItem extends Component {
     }
 
     draggingPropsStyle(){
-        if(this.props.id === (this.props.draggedId + 'c'))
+        if(this.props.id === '#22#')
 			return {
                 top:  ((this.props.order - 1) * 43),
                 backgroundColor : '#dde2ff',

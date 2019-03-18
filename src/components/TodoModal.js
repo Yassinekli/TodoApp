@@ -4,15 +4,21 @@ class TodoModal extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			showAlert: false
+			alert: {
+				alertMessage: "",
+				showAlert: false
+			}
 		}
 	}
 
 	componentWillUpdate(){
-		if(!this.props.modal.show && this.state.showAlert)
+		if(!this.props.modal.show && this.state.alert.showAlert)
 		{
 			this.setState({
-				showAlert: false
+				alert: {
+					alertMessage: "",
+					showAlert: false
+				}
 			})
 		}
 	}
@@ -69,26 +75,38 @@ class TodoModal extends Component {
 										this.textInput.disabled = true;
 										this.btnSubmit.disabled = true;
 										this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId})
-										.then(res=>{
-											if(res === 1)
-												this.setState({
+										.then(()=>{
+											this.setState({
+												alert: {
+													alertMessage: "",
 													showAlert: false
-												})
+												}
+											})
 										})
-										.catch(res=>console.log(res));
+										.catch((msg)=>{
+											this.setState({
+												alert: {
+													alertMessage: msg,
+													showAlert: true
+												}
+											})
+										});
 									}
 									else
 										this.setState({
-											showAlert: true
-										})
+											alert: {
+												alertMessage: "Can't add or edit an empty or same todo's title",
+												showAlert: true
+											}
+										});
 								}
 							}}
 							onInput={()=>{
 								this.btnSubmit.disabled = (this.textInput.value.trim().length === 0 || this.textInput.value.trim() === this.props.modal.todoTitle);
 							}}
 						/>
-						<div className={(this.state.showAlert) ? "alert alert-danger show-alert-danger" : "alert alert-danger"} role="alert">
-							Can't add or edit an empty or same todo's title
+						<div className={(this.state.alert.showAlert) ? "alert alert-danger show-alert-danger" : "alert alert-danger"} role="alert">
+							{this.state.alert.alertMessage}
 						</div>
 						<button 
 							className="btn btn-primary btn-add" 
@@ -97,13 +115,22 @@ class TodoModal extends Component {
 								this.textInput.disabled = true;
 								this.btnSubmit.disabled = true;
 								this.props.submitTodo({option: this.props.modal.option, todoId:this.props.modal.todoId})
-								.then(res=>{
-									if(res === 1)
-										this.setState({
+								.then(()=>{
+									this.setState({
+										alert: {
+											alertMessage: "",
 											showAlert: false
-										})
+										}
+									})
 								})
-								.catch(res=>console.log(res));
+								.catch((msg)=>{
+									this.setState({
+										alert: {
+											alertMessage: msg,
+											showAlert: true
+										}
+									})
+								});
 							}}
 						>{this.props.modal.option}</button>
 					</div>
