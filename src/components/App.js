@@ -41,6 +41,7 @@ class App extends Component {
 					/>
 					<button 
 						className={(this.state.showSaveChanges) ? "btn btn-primary float-left btn-save show-btn-save" : "btn btn-primary float-left btn-save"}
+						
 					>Save Changes</button>
 					<button 
 						className="btn btn-primary float-right rounded-circle plus"
@@ -187,7 +188,7 @@ class App extends Component {
 		let showSaveChanges = false;
 		for (let i = 0; i < todos.length - 1; i++)
 		{
-			if(todos[i].order !== this.state.originalTodos[i].order)
+			if(todos[i].order !== this.state.originalTodos[i].order || todos[i].completed !== this.state.originalTodos[i].completed)
 			{
 				showSaveChanges = true;
 				break;
@@ -247,7 +248,7 @@ class App extends Component {
 		let showSaveChanges = false;
 		for (let i = 0; i < todos.length; i++)
 		{
-			if(todos[i].completed !== this.state.originalTodos[i].completed)
+			if(todos[i].order !== this.state.originalTodos[i].order || todos[i].completed !== this.state.originalTodos[i].completed)
 			{
 				showSaveChanges = true;
 				break;
@@ -289,8 +290,10 @@ class App extends Component {
 							if(Object.getOwnPropertyNames(newTodo).length !== 0)
 							{
 								let todos = this.state.todos.slice();
+								let originalTodos = this.state.originalTodos.slice();
 					
 								todos.push(newTodo);
+								originalTodos.push({order: newTodo.order, completed: newTodo.completed});
 								
 								this.setState({
 									modal: {
@@ -301,7 +304,9 @@ class App extends Component {
 									},
 									draggedId: null,
 									lastHoveredId : null,
-									todos
+									todos,
+									originalTodos,
+									showSaveChanges: this.state.showSaveChanges
 								});
 								return resolve();
 							}
@@ -339,7 +344,9 @@ class App extends Component {
 								},
 								draggedId: null,
 								lastHoveredId : null,
-								todos
+								todos,
+								originalTodos: this.state.originalTodos,
+								showSaveChanges: this.state.showSaveChanges
 							});
 							return resolve();
 						}
