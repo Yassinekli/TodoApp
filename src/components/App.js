@@ -41,7 +41,18 @@ class App extends Component {
 					/>
 					<button 
 						className={(this.state.showSaveChanges) ? "btn btn-primary float-left btn-save show-btn-save" : "btn btn-primary float-left btn-save"}
-						
+						onClick={()=>{
+							let updateTodos = this.state.todos.filter((todo, i)=>todo.order !== this.state.originalTodos[i].order || todo.completed !== this.state.originalTodos[i].completed)
+							fetch('http://localhost:3001/todos/update', {
+								method: 'PUT',
+								body: JSON.stringify({
+									updateTodos
+								}),
+								headers: {
+									"Content-type": "application/json; charset=UTF-8"
+								}
+							})
+						}}
 					>Save Changes</button>
 					<button 
 						className="btn btn-primary float-right rounded-circle plus"
@@ -407,12 +418,26 @@ class App extends Component {
 		.then((feedback)=>{
 			if(feedback && feedback[0].n === 1)
 			{
-				let todos = this.state.todos.slice();
-				todos = todos.filter(todo=>(todo.order !== order));
-				todos.forEach(todo=>{
+				let todos = this.state.todos.filter(todo=>(todo.order !== order));
+				let originalTodos = this.state.originalTodos.filter(todo=>(todo.order !== order));
+				
+				todos.forEach((todo, i)=>{
 					if(todo.order > order)
+					{
 						todo.order--;
+						originalTodos[i].order--;
+					}
 				})
+
+				let showSaveChanges = false;
+				for (let i = 0; i < todos.length; i++)
+				{
+					if(todos[i].order !== this.state.originalTodos[i].order || todos[i].completed !== this.state.originalTodos[i].completed)
+					{
+						showSaveChanges = true;
+						break;
+					}
+				}
 
 				this.setState({
 					modal: {
@@ -423,7 +448,9 @@ class App extends Component {
 					},
 					draggedId: null,
 					lastHoveredId : null,
-					todos
+					todos,
+					originalTodos,
+					showSaveChanges
 				})
 			}
 		})
