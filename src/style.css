@@ -74,6 +74,14 @@
 .btn-save{
     position: relative;
     top: -100px;
+
+    transition-property: top;
+    transition-duration: 0.5s;
+    transition-timing-function: linear;
+}
+
+.show-btn-save{
+    top: 0px;
 }
 
 .icon{

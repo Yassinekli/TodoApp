@@ -23,7 +23,9 @@ class App extends Component {
 			},
 			draggedId: null,
 			lastHoveredId : null,
-			todos: []
+			todos: [],
+			originalTodos: [],
+			showSaveChanges: false
 		}
 	}
 
@@ -37,7 +39,9 @@ class App extends Component {
 						toggleTodoModal={this.toggleTodoModal}
 						submitTodo={this.submitTodo}
 					/>
-					<button className="btn btn-primary float-left btn-save">Save Changes</button>
+					<button 
+						className={(this.state.showSaveChanges) ? "btn btn-primary float-left btn-save show-btn-save" : "btn btn-primary float-left btn-save"}
+					>Save Changes</button>
 					<button 
 						className="btn btn-primary float-right rounded-circle plus"
 						data-toggle="tooltip"
@@ -92,7 +96,8 @@ class App extends Component {
 				},
 				draggedId: null,
 				lastHoveredId : null,
-				todos:json
+				todos:json,
+				originalTodos: json.map(todo=>({order: todo.order, completed: todo.completed}))
 			});
 		});
 	}
@@ -117,7 +122,9 @@ class App extends Component {
 			},
 			draggedId: e.target.getAttribute('id'),
 			lastHoveredId : null,
-			todos
+			todos,
+			originalTodos: this.state.originalTodos,
+			showSaveChanges: this.state.showSaveChanges
 		})
 	}
 	
@@ -155,9 +162,6 @@ class App extends Component {
 					draggedTodos.push(todo);
 			})
 			
-			console.log(todos[draggedIndex])
-			console.log(todos[hoveredIndex])
-			
 			todos[draggedIndex].order = todos[hoveredIndex].order;
 			draggedTodos.forEach(todo=>++todo.order);
 		}
@@ -180,6 +184,16 @@ class App extends Component {
 
 		todos[todos.length - 1].order = todos[draggedIndex].order;
 
+		let showSaveChanges = false;
+		for (let i = 0; i < todos.length - 1; i++)
+		{
+			if(todos[i].order !== this.state.originalTodos[i].order)
+			{
+				showSaveChanges = true;
+				break;
+			}
+		}
+		
 		this.setState({
 			modal: {
 				show: false,
@@ -190,7 +204,9 @@ class App extends Component {
 			draggedId: this.state.draggedId,
 			lastHoveredId : hoveredId,
 			lastOrderHovered: todos[hoveredIndex].order,
-			todos
+			todos,
+			originalTodos: this.state.originalTodos,
+			showSaveChanges
 		});
 	}
 	
@@ -207,7 +223,9 @@ class App extends Component {
 			},
 			draggedId: null,
 			lastHoveredId : null,
-			todos
+			todos,
+			originalTodos: this.state.originalTodos,
+			showSaveChanges: this.state.showSaveChanges
 		});
 	}
 
@@ -226,6 +244,16 @@ class App extends Component {
 			return todo;
 		})
 		
+		let showSaveChanges = false;
+		for (let i = 0; i < todos.length; i++)
+		{
+			if(todos[i].completed !== this.state.originalTodos[i].completed)
+			{
+				showSaveChanges = true;
+				break;
+			}
+		}
+
 		this.setState({
 			modal: {
 				show: false,
@@ -235,7 +263,9 @@ class App extends Component {
 			},
 			draggedId: null,
 			lastHoveredId : null,
-			todos
+			todos,
+			originalTodos: this.state.originalTodos,
+			showSaveChanges
 		});
 	}
 
