@@ -35,7 +35,7 @@
     color: rgb(245, 27, 27);
 }
 
-.alert-danger{
+.hide-alert-danger{
     display: none;
 }
 

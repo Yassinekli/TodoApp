@@ -25,13 +25,26 @@ class App extends Component {
 			lastHoveredId : null,
 			todos: [],
 			originalTodos: [],
-			showSaveChanges: false
+			showSaveChanges: false,
+			alert: {
+				show: false,
+				type: 'success',
+				message: ''
+			}
 		}
 	}
 
 	render() {
+		let alertStyle = {position: 'absolute', top: '-50px'};
+		
+		if(this.state.alert.show)
+			alertStyle.top = '0px';
+
 		return (
-			<div className="container">
+			<div className="container">			
+				<div className={"alert alert-" + this.state.alert.type} style={alertStyle}  role="alert">
+					{this.state.alert.message}
+				</div>
                 <div className="clearfix">
 					<TodoModal
 						modal={this.state.modal} 
@@ -40,8 +53,10 @@ class App extends Component {
 						submitTodo={this.submitTodo}
 					/>
 					<button 
+						ref={(elem=>{this.btnSaveChanges = elem;})}
 						className={(this.state.showSaveChanges) ? "btn btn-primary float-left btn-save show-btn-save" : "btn btn-primary float-left btn-save"}
 						onClick={()=>{
+							this.btnSaveChanges.disabled = true;
 							let updateTodos = this.state.todos.filter((todo, i)=>todo.order !== this.state.originalTodos[i].order || todo.completed !== this.state.originalTodos[i].completed)
 							fetch('http://localhost:3001/todos/update', {
 								method: 'PUT',
@@ -50,6 +65,50 @@ class App extends Component {
 								}),
 								headers: {
 									"Content-type": "application/json; charset=UTF-8"
+								}
+							})
+							.then((res)=>res.json())
+							.then((feedback)=>{
+								this.btnSaveChanges.disabled = false;
+								if(feedback === 1)
+									this.setState({
+										modal: {
+											show: false,
+											option: '',
+											todoId: null,
+											todoTitle: ''
+										},
+										draggedId: null,
+										lastHoveredId : null,
+										todos: this.state.todos,
+										originalTodos: this.state.originalTodos,
+										showSaveChanges: false,
+										alert: {
+											show: true,
+											type: 'success',
+											message: 'Todos updated successfully'
+										}
+									});
+								else
+								{
+									this.setState({
+										modal: {
+											show: false,
+											option: '',
+											todoId: null,
+											todoTitle: ''
+										},
+										draggedId: null,
+										lastHoveredId : null,
+										todos: this.state.todos,
+										originalTodos: this.state.originalTodos,
+										showSaveChanges: false,
+										alert: {
+											show: true,
+											type: 'danger',
+											message: 'Error occured while updating, please a few later!'
+										}
+									});
 								}
 							})
 						}}
@@ -399,7 +458,9 @@ class App extends Component {
 			},
 			draggedId: null,
 			lastHoveredId : null,
-			todos
+			todos: this.state.todos,
+			originalTodos: this.state.originalTodos,
+			showSaveChanges: this.state.showSaveChanges
 		});
 	}
 
