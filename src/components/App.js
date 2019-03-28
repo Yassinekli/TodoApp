@@ -402,7 +402,8 @@ class App extends Component {
 									lastHoveredId : null,
 									todos,
 									originalTodos,
-									showSaveChanges: this.state.showSaveChanges
+									showSaveChanges: this.state.showSaveChanges,
+									alert: this.state.alert
 								});
 								return resolve();
 							}
@@ -442,7 +443,8 @@ class App extends Component {
 								lastHoveredId : null,
 								todos,
 								originalTodos: this.state.originalTodos,
-								showSaveChanges: this.state.showSaveChanges
+								showSaveChanges: this.state.showSaveChanges,
+								alert: this.state.alert
 							});
 							return resolve();
 						}
@@ -475,6 +477,16 @@ class App extends Component {
 
 		clickedTodo.order = 1;
 
+		let showSaveChanges = false;
+		for (let i = 0; i < todos.length; i++)
+		{
+			if(todos[i].order !== this.state.originalTodos[i].order || todos[i].completed !== this.state.originalTodos[i].completed)
+			{
+				showSaveChanges = true;
+				break;
+			}
+		}
+
 		this.setState({
 			modal: {
 				show: false,
@@ -486,7 +498,8 @@ class App extends Component {
 			lastHoveredId : null,
 			todos: this.state.todos,
 			originalTodos: this.state.originalTodos,
-			showSaveChanges: this.state.showSaveChanges
+			showSaveChanges: showSaveChanges,
+			alert: this.state.alert
 		});
 	}
 
@@ -585,7 +598,10 @@ class App extends Component {
 			},
 			draggedId: null,
 			lastHoveredId : null,
-			todos: this.state.todos
+			todos: this.state.todos,
+			originalTodos: this.state.originalTodos,
+			showSaveChanges: this.state.showSaveChanges,
+			alert: this.state.alert
 		});
 	}
 }
