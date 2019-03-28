@@ -28,13 +28,17 @@ class App extends Component {
 			showSaveChanges: false,
 			alert: {
 				show: false,
-				type: 'success',
-				message: 'Everything will be OK :)'
+				message: ''
 			}
 		}
 	}
 
 	render() {
+		let alertClassNames = "alert alert-danger alert-style";
+
+		if(this.state.alert.show)
+			alertClassNames += " alert-style-show";
+
 		return (
 			<div className="container">
                 <div className="clearfix">
@@ -44,7 +48,7 @@ class App extends Component {
 						toggleTodoModal={this.toggleTodoModal}
 						submitTodo={this.submitTodo}
 					/>
-					<div className={"alert alert-" + this.state.alert.type}  role="alert">
+					<div className={alertClassNames}  role="alert">
 						{this.state.alert.message}
 					</div>
 					<button 
@@ -79,9 +83,8 @@ class App extends Component {
 										originalTodos: this.state.todos.map(todo=>({order: todo.order, completed: todo.completed})),
 										showSaveChanges: false,
 										alert: {
-											show: true,
-											type: 'success',
-											message: 'Todos updated successfully'
+											show: false,
+											message: ''
 										}
 									});
 								else
@@ -100,7 +103,6 @@ class App extends Component {
 										showSaveChanges: true,
 										alert: {
 											show: true,
-											type: 'danger',
 											message: 'Error occured while updating, please try a few later!'
 										}
 									});
@@ -122,7 +124,6 @@ class App extends Component {
 									showSaveChanges: true,
 									alert: {
 										show: true,
-										type: 'danger',
 										message: 'Error occured while updating, please try a few later!'
 									}
 								});

@@ -35,12 +35,23 @@
     color: rgb(245, 27, 27);
 }
 
-.hide-alert-danger{
+.hide-alert{
     display: none;
 }
 
-.show-alert-danger{
+.show-alert{
     display: block;
+}
+
+.alert-style{
+    display: none;
+    margin-left: 10px;
+    padding: 10px;
+    top: 8px;
+}
+
+.alert-style-show{
+    display: inline;
 }
 
 /* Some Classes */
@@ -73,11 +84,11 @@
 
 .btn-save{
     position: relative;
-    top: -100px;
+    top: -300px;
 
     transition-property: top;
-    transition-duration: 0.5s;
-    transition-timing-function: linear;
+    transition-duration: 0.8s;
+    transition-timing-function: ease;
 }
 
 .show-btn-save{
@@ -198,4 +209,15 @@
 
 .btn-add{
     float: right;
+}
+
+/* 
+    Media Queries
+*/
+
+@media(max-width: 768px){
+    .alert-style-show{
+        display: block;
+        margin-left: 0px;
+    }
 }

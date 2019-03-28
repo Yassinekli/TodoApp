@@ -105,7 +105,7 @@ class TodoModal extends Component {
 								this.btnSubmit.disabled = (this.textInput.value.trim().length === 0 || this.textInput.value.trim() === this.props.modal.todoTitle);
 							}}
 						/>
-						<div className={(this.state.alert.showAlert) ? "alert alert-danger show-alert-danger" : "alert alert-danger hide-alert-danger"} role="alert">
+						<div className={(this.state.alert.showAlert) ? "alert alert-danger show-alert" : "alert alert-danger hide-alert"} role="alert">
 							{this.state.alert.alertMessage}
 						</div>
 						<button 
