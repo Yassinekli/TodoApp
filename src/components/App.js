@@ -29,22 +29,14 @@ class App extends Component {
 			alert: {
 				show: false,
 				type: 'success',
-				message: ''
+				message: 'Everything will be OK :)'
 			}
 		}
 	}
 
 	render() {
-		let alertStyle = {position: 'absolute', top: '-50px'};
-		
-		if(this.state.alert.show)
-			alertStyle.top = '0px';
-
 		return (
-			<div className="container">			
-				<div className={"alert alert-" + this.state.alert.type} style={alertStyle}  role="alert">
-					{this.state.alert.message}
-				</div>
+			<div className="container">
                 <div className="clearfix">
 					<TodoModal
 						modal={this.state.modal} 
@@ -52,6 +44,9 @@ class App extends Component {
 						toggleTodoModal={this.toggleTodoModal}
 						submitTodo={this.submitTodo}
 					/>
+					<div className={"alert alert-" + this.state.alert.type}  role="alert">
+						{this.state.alert.message}
+					</div>
 					<button 
 						ref={(elem=>{this.btnSaveChanges = elem;})}
 						className={(this.state.showSaveChanges) ? "btn btn-primary float-left btn-save show-btn-save" : "btn btn-primary float-left btn-save"}
@@ -81,7 +76,7 @@ class App extends Component {
 										draggedId: null,
 										lastHoveredId : null,
 										todos: this.state.todos,
-										originalTodos: this.state.originalTodos,
+										originalTodos: this.state.todos.map(todo=>({order: todo.order, completed: todo.completed})),
 										showSaveChanges: false,
 										alert: {
 											show: true,
@@ -102,14 +97,35 @@ class App extends Component {
 										lastHoveredId : null,
 										todos: this.state.todos,
 										originalTodos: this.state.originalTodos,
-										showSaveChanges: false,
+										showSaveChanges: true,
 										alert: {
 											show: true,
 											type: 'danger',
-											message: 'Error occured while updating, please a few later!'
+											message: 'Error occured while updating, please try a few later!'
 										}
 									});
 								}
+							})
+							.catch(()=>{
+								this.btnSaveChanges.disabled = false;
+								this.setState({
+									modal: {
+										show: false,
+										option: '',
+										todoId: null,
+										todoTitle: ''
+									},
+									draggedId: null,
+									lastHoveredId : null,
+									todos: this.state.todos,
+									originalTodos: this.state.originalTodos,
+									showSaveChanges: true,
+									alert: {
+										show: true,
+										type: 'danger',
+										message: 'Error occured while updating, please try a few later!'
+									}
+								});
 							})
 						}}
 					>Save Changes</button>
@@ -168,7 +184,9 @@ class App extends Component {
 				draggedId: null,
 				lastHoveredId : null,
 				todos:json,
-				originalTodos: json.map(todo=>({order: todo.order, completed: todo.completed}))
+				originalTodos: json.map(todo=>({order: todo.order, completed: todo.completed})),
+				showSaveChanges: false,
+				alert: this.state.alert
 			});
 		});
 	}
@@ -177,6 +195,9 @@ class App extends Component {
 		Handlers
 	*/
 	dragStartHandler = (e)=>{
+		if(this.btnSaveChanges.disabled)
+			{ e.preventDefault(); return; }
+		
 		let todos = this.state.todos.slice();
 		let clonedTodo = {...todos.find(todo => (todo._id.toString() === e.target.getAttribute('id')))}
 
@@ -195,7 +216,8 @@ class App extends Component {
 			lastHoveredId : null,
 			todos,
 			originalTodos: this.state.originalTodos,
-			showSaveChanges: this.state.showSaveChanges
+			showSaveChanges: this.state.showSaveChanges,
+			alert: this.state.alert
 		})
 	}
 	
@@ -277,7 +299,8 @@ class App extends Component {
 			lastOrderHovered: todos[hoveredIndex].order,
 			todos,
 			originalTodos: this.state.originalTodos,
-			showSaveChanges
+			showSaveChanges,
+			alert: this.state.alert
 		});
 	}
 	
@@ -296,7 +319,8 @@ class App extends Component {
 			lastHoveredId : null,
 			todos,
 			originalTodos: this.state.originalTodos,
-			showSaveChanges: this.state.showSaveChanges
+			showSaveChanges: this.state.showSaveChanges,
+			alert: this.state.alert
 		});
 	}
 
@@ -336,7 +360,8 @@ class App extends Component {
 			lastHoveredId : null,
 			todos,
 			originalTodos: this.state.originalTodos,
-			showSaveChanges
+			showSaveChanges,
+			alert: this.state.alert
 		});
 	}
 
@@ -465,11 +490,14 @@ class App extends Component {
 	}
 
 	deleteTodoHandler = ({_id, order})=>{
+		this.btnSaveChanges.disabled = true;
+		let updateTodos = this.state.todos.filter((todo, i)=>todo.order !== this.state.originalTodos[i].order || todo.completed !== this.state.originalTodos[i].completed)
 		fetch('http://localhost:3001/todos', {
 			method: 'DELETE',
 			body: JSON.stringify({
 				_id,
-				order
+				order,
+				updateTodos
 			}),
 			headers: {
 				"Content-type": "application/json; charset=UTF-8"
@@ -477,6 +505,7 @@ class App extends Component {
 		})
 		.then((res)=>res.json())
 		.then((feedback)=>{
+			this.btnSaveChanges.disabled = false;
 			if(feedback && feedback[0].n === 1)
 			{
 				let todos = this.state.todos.filter(todo=>(todo.order !== order));
@@ -490,16 +519,6 @@ class App extends Component {
 					}
 				})
 
-				let showSaveChanges = false;
-				for (let i = 0; i < todos.length; i++)
-				{
-					if(todos[i].order !== this.state.originalTodos[i].order || todos[i].completed !== this.state.originalTodos[i].completed)
-					{
-						showSaveChanges = true;
-						break;
-					}
-				}
-
 				this.setState({
 					modal: {
 						show: false,
@@ -511,11 +530,45 @@ class App extends Component {
 					lastHoveredId : null,
 					todos,
 					originalTodos,
-					showSaveChanges
+					showSaveChanges: false,
+					alert: this.state.alert
+				})
+			}
+			else
+			{
+				this.setState({
+					modal: {
+						show: false,
+						option: '',
+						todoId: null,
+						todoTitle: ''
+					},
+					draggedId: null,
+					lastHoveredId : null,
+					todos: this.state.todos,
+					originalTodos: this.state.originalTodos,
+					showSaveChanges: this.state.showSaveChanges,
+					alert: this.state.alert
 				})
 			}
 		})
-		.catch(err=>console.error(err));
+		.catch(()=>{
+			this.btnSaveChanges.disabled = false;
+			this.setState({
+				modal: {
+					show: false,
+					option: '',
+					todoId: null,
+					todoTitle: ''
+				},
+				draggedId: null,
+				lastHoveredId : null,
+				todos: this.state.todos,
+				originalTodos: this.state.originalTodos,
+				showSaveChanges: this.state.showSaveChanges,
+				alert: this.state.alert
+			})
+		});
 	}
 
 	/*
